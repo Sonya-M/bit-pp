@@ -194,17 +194,23 @@ console.log("Exercise 10........................");
 // the error message. 
 // Input: e = 78, p = 3, a = [2, -2, 33, 12, 5, 8]
 // Output: [2, -2, 33, 78, 12, 5, 8]
-
+                                    //   0   1  2   3   4  5  6
 var elToInsert = 78, pos = 3, inArray = [2, -2, 33, 12, 5, 8];
 console.log("Array before insert: ", inArray);
 
-if (pos >= inArray.length) 
+if (pos > inArray.length) {
     console.log("ERROR: position must be less than array.length")
+} else {
+    for (var i = inArray.length; i > pos; i--) { 
+        // console.log("Menjam inArray[i] (" + inArray[i] + ") sa inArray[i-1] (" + inArray[i-1] +")");
+        inArray[i] = inArray[i-1];
+    }
+    inArray[pos] = elToInsert;
 
-for (var i = inArray.length; i > pos; i--) { 
-    inArray[i] = inArray[i-1];
+    console.log("New array length: ", inArray.length);
+    console.log("New array with inserted element:\n " + inArray);
 }
-inArray[pos] = elToInsert;
+
 
 // var printArr = "";
 // for (var i = 0; i < inArray.length; i++) {
@@ -212,6 +218,5 @@ inArray[pos] = elToInsert;
 // }
 // console.log(printArr);
 
-console.log("New array length: ", inArray.length);
-console.log("New array with inserted element:\n " +  inArray);
+
 console.log("###############################################");
