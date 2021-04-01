@@ -1,5 +1,5 @@
 function isInteger(a) {
-    return a % 1 == 0
+    return a % 1 === 0
 }
 
 
