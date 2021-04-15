@@ -1,0 +1,2 @@
+These are the class handouts.
+Most of the tasks are included as comment in the code.

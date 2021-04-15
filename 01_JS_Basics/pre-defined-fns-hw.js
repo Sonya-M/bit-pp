@@ -1,3 +1,4 @@
+
 console.log("#########################################");
 console.log("Exercise 1");
 
@@ -48,7 +49,7 @@ function joinElsToStr (arr) {
         var next = arr[i];
         // NB: you cannot use next != NaN because NaN !== NaN (see material)
         if (next != undefined && next != Infinity && !isNaN(next))
-            str += arr[i] ;
+            str += next ;
     }
     return str;
 }
@@ -70,9 +71,8 @@ function removeFalsies (arr) {
     var resultArray = [];
     for (var i = 0; i < arr.length; i++) {
         var next = arr[i];
-        if (!!next == true /*!isNaN(next) && next !== 0 && next !== -0 && next !== null
-            && next != undefined && next !== 0n && next !== -0n 
-                && next != false && next != ""*/) {
+        if (!isNaN(next) && next !== 0 && next !== null
+            && next != undefined && next != false && next != "") {
                 resultArray[resultArray.length] = arr[i];
             }
     }
