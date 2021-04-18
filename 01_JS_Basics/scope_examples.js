@@ -29,7 +29,7 @@ function myFunct() {
     console.log(global);
 }
 
-/* You might expect that the first alert() function will display 123 (the value
+/** You might expect that the first alert() function will display 123 (the value
 of the global variable a) and the second will display 1 (the local variable a).
 But, this is not the case. The first alert will show undefined. This is because,
 inside the function, the local scope is more important than the global scope.
@@ -71,3 +71,4 @@ for (let j = 0; j < 3; j++) {
     // empty
 }
 // console.log(j); // output: ReferenceError: j is not defined
+
