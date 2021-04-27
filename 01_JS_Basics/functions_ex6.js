@@ -176,6 +176,8 @@ console.log("Exercise 5.....................") ;
 
 })();
 
+// console.log(exercise5);
+
 console.log("###############################");
 console.log("Exercise 6.....................") ;
 
@@ -367,14 +369,11 @@ console.log("Exercise 13.....................") ;
 
 (function exercise13() {
 
-    function avg(argument) {    
-        var args;
-        if (Array.isArray(argument)) args = argument;
-        else args = arguments;
+    function avg(array) {    
         var sum = 0;
-        var count = args.length;
-        for (var i = 0; i < args.length; i++) {
-            if (typeof args[i] === "number") sum += args[i];
+        var count = array.length;
+        for (var i = 0; i < array.length; i++) {
+            if (typeof array[i] === "number") sum += array[i];
             else count--;
         }
         return sum / count;
@@ -390,8 +389,6 @@ console.log("Exercise 13.....................") ;
         return result;
     }
 
-    // test modified avg:
-    // console.log(avg([1, 2, 3, 4, 5, true, 6, 7, 8, 9, 10, "blabla"]));
     var input = [1, 2, 3, 4, 5, true, 6, 7, 8, 9, 10, "blabla"];
     console.log("input: ", input);
     console.log("output: ", allGreaterThanAvg(input));
@@ -469,8 +466,8 @@ console.log("Exercise 15.....................") ;
     function longestStrLen(arrayOfStrings) {
         var longest = 0;
         for (var i = 0; i < arrayOfStrings.length; i++) {
-            if (arrayOfStrings.length > longest) {
-                longest = arrayOfStrings.length;
+            if (arrayOfStrings[i].length > longest) {
+                longest = arrayOfStrings[i].length;
             }
         }
         return longest;

@@ -73,3 +73,15 @@ function sum(num1, num2) {
  var result = sumNumbers();
  
  console.log(result); // -1
+
+ function outer(param) {
+    
+    return "The result is " + inner(param);
+    
+    function inner(input) {
+         return input * 2;
+     }
+
+ }
+
+ console.log(outer(2));
