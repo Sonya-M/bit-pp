@@ -1,0 +1,21 @@
+spread operator for shallow object copy:
+
+
+    <code> 
+
+        let objClone = { ...obj }; // pass all key:value pairs from an object 
+
+        // spread for copying an array
+        let arr = [1, 2, 3];
+        let arr2 = [...arr]; // like arr.slice()
+
+        arr2.push(4);
+        //  arr2 becomes [1, 2, 3, 4]
+        //  arr remains unaffected
+
+        /* Note: Spread syntax effectively goes one level deep while copying an
+        array. Therefore, it may be unsuitable for copying multidimensional
+        arrays */
+
+
+    </code>
