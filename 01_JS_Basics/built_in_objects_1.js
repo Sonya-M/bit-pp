@@ -583,13 +583,72 @@
             // convert remainder for hours to minutes, get remainder for minutes
             // convert remainder for minutes to seconds - remainder should be 0
 
-            var hours, mins, secs;
-            [hours, mins, secs] = startTime.split(":"); // Destructuring assignment!!!
-            log("hrs, mins, secs: " + hours +", " + mins + ", " + secs);
-            return 0; //stub
-        }
-        calculateTimeDifference("1:4:13");
+            // var hours, mins, secs;
+            // [hours, mins, secs] = startTime.split(":"); // Destructuring assignment!!!
+            // log("hrs, mins, secs: " + hours + ", " + mins + ", " + secs);
 
+
+            /// TODO: BUGGY1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            var hours, mins, secs;
+            [hours, mins, secs] = startTime.split(":");
+            console.log(hours, mins, secs);
+            var startInSecs = timeToSeconds(hours, mins, secs);
+            console.log(startInSecs);
+
+            var hours2, mins2, secs2;
+            [hours2, mins2, secs2] = endTime.split(":");
+            console.log(hours2, mins2, secs2);
+            var endInSecs = timeToSeconds(hours2, mins2, secs2);
+            console.log(endInSecs);
+            log(endInSecs - startInSecs);
+
+            
+
+            return timeFromSeconds(endInSecs - startInSecs);
+        }
+
+        /**
+         * 
+         * @param {number} hrs 
+         * @param {number} mins 
+         * @param {number} secs 
+         * @returns a number representing given time converted to seconds
+         */
+        function timeToSeconds(hrs, mins, secs) {
+            return secs + mins * 60 + hrs * 3600;
+        }
+        /**
+         * 
+         * @param {number} seconds time in seconds
+         * @returns a string representation of time in the format HH:MM:SS
+         */
+        function timeFromSeconds(seconds) {
+            var hrs = Math.floor(seconds / 3600);
+            var mins = Math.floor((seconds % 3600) / 60);
+            var secs =seconds - (hrs * 3600 + mins * 60);
+            var timeString = [];
+            timeString[0] = (formatToNDigits(hrs, 2));
+            timeString[1] = (formatToNDigits(mins, 2));
+            timeString[2] = (formatToNDigits(secs, 2));
+            return timeString.join(":");
+
+         }
+
+        /**
+         * @param {number} num whose number of digits is less than or equal to nDigits
+         * @param {nDigits} the number of digits the string should contain
+         * @returns a string representation of given number with length == nDigits
+         */
+        function formatToNDigits(num, nDigits) {
+            var str = "" + num;
+            while (str.length < nDigits) str = "0" + str;
+            return str;
+        }
+
+        // console.log(timeFromSeconds(3600))
+        // log(formatToNDigits(3, 2));
+        console.log("Test time from seconds: " + timeFromSeconds(3600));
+        console.log(calculateTimeDifference("8:22:13", "11:43:22"));
     })();
     
    

@@ -37,10 +37,10 @@ function roundToNDecPlaces(n, dec) {
 /**
  * @param {number} low 
  * @param {number} hi 
- * @returns a random integer in range [low, hi]
+ * @returns a random integer in range [low, hi)
  */
  function randomInt(low, hi) {
-    return Math.floor(Math.random() * hi) + low;
+    return Math.floor(Math.random() * (hi-low) + low);
 }
 
 
@@ -48,6 +48,18 @@ function roundToNDecPlaces(n, dec) {
 // TEST FUNCTIONS //
 ////////////////////
 
+function testRandomInt() {
+    var lo = 1;
+    var hi = 101;
+    var nums = [];
+    for (var i = 0; i < 100; i++) {
+        nums.push(randomInt(lo, hi));
+    }
+    console.log("" + nums.sort(function (a, b) {
+        return a - b;
+    }));
+}
+testRandomInt();
 
 function testRoundTo2DecPlaces() {
     var n = [3.4568734, 2.4999, 2.12345, 2.00, 2.01, 2.99];

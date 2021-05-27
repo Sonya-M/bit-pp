@@ -8,15 +8,15 @@
 // this function are pure functions.
 
 // Create constructor functions with properties representing the following: •
-//     Country - name, odds, continent (EU, AS, AF, SA, NA, AU) • Person - name,
+//     Country - name, odds, CONTINENT (EU, AS, AF, SA, NA, AU) • Person - name,
 //     surname, date of birth • Player - person, bet amount, country (instance
 //     of Country) • Address - country, city, postal code, street and number •
 //     BettingPlace - address and list of players (initially empty) •
 //     BettingHouse - competition, list of betting places (initially empty) and
 //     number of players
 
-// Create continents as constants (objects that can not change). So, when
-// passing a continent as a parameter, you should pass Continent.ASIA.
+// Create CONTINENTs as constants (objects that can not change). So, when
+// passing a CONTINENT as a parameter, you should pass CONTINENT.ASIA.
 
 // Add a method to Person that returns a formatted string containing the name,
 // surname and date of birth of the person (date of birth in dd.mm.yy format).
@@ -59,10 +59,10 @@
     "use strict";
     
     /**
-     * Create continents as constants (objects that can not change). So, when 
-     * passing a continent as a parameter, you should pass Continent.ASIA.
+     * Create CONTINENTs as constants (objects that can not change). So, when 
+     * passing a CONTINENT as a parameter, you should pass CONTINENT.ASIA.
      */
-    const Continent = {
+    const CONTINENT = Object.freeze({
         ASIA: "AS",
         EUROPE: "EU",
         AFRICA: "AF",
@@ -70,18 +70,18 @@
         NORTH_AMERICA: "NA",
         AUSTRALIA: "AU"
 
-    }
+    });
 // Math.PI;
     /**
      * 
      * @param {string} name 
      * @param {number} odds 
-     * @param {string} continent
+     * @param {string} CONTINENT
      */
-    function Country(name, odds, continent) {
+    function Country(name, odds, CONTINENT) {
         this.name = name;
         this.odds = odds;
-        this.continent = continent;
+        this.CONTINENT = CONTINENT;
     }
 
     /**
@@ -341,9 +341,9 @@
 
         log("########################################################");
         log("Testing Country constructor.......................");
-        var serbia = new Country("Serbia", 2, Continent.EUROPE);
+        var serbia = new Country("Serbia", 2, CONTINENT.EUROPE);
         log("stringify output: " + JSON.stringify(serbia));
-        var uk = new Country("UK", 1.5, Continent.EUROPE);
+        var uk = new Country("UK", 1.5, CONTINENT.EUROPE);
         log("stringify output: " + JSON.stringify(uk));
 
         log("########################################################");
@@ -425,13 +425,13 @@
      * @param {number} betAmount 
      * @param {string} country 
      * @param {number} odds 
-     * @param {Continent} continent 
+     * @param {CONTINENT} CONTINENT 
      */
     function createPlayerFromRawData(name, surname, birthDay, birthMonth, 
-                birthYear, betAmount, country, odds, continent) {
+                birthYear, betAmount, country, odds, CONTINENT) {
         var dateOfBirth = new Date(birthDay, birthMonth, birthYear);
         var person = new Person(name, surname, dateOfBirth)
-        var countryObject = new Country(country, odds, continent);
+        var countryObject = new Country(country, odds, CONTINENT);
         // return new Player(person, betAmount, countryObject);
         return createPlayer(person, betAmount, countryObject);
     }
@@ -448,12 +448,12 @@
 
     function testCreatePlayer() {
         var player1 = createPlayerFromRawData("John", "Smith", 1, 2, 1990,
-                    100, "UK", 2, Continent.EUROPE);
+                    100, "UK", 2, CONTINENT.EUROPE);
         console.log(player1);
 
         var person2 = new Person("Bleki", "Blek", 1, 1, 2000);
         var betAmount2 = 500;
-        var country2 = new Country("Germany", 2, Continent.EUROPE);
+        var country2 = new Country("Germany", 2, CONTINENT.EUROPE);
         var player2 = createPlayer(person2, betAmount2, country2);
         console.log(player2);
     }
@@ -465,16 +465,16 @@
      * 
      * @param {string} countryName 
      * @param {number} countryOdds 
-     * @param {string} continent
+     * @param {string} CONTINENT
      * @param {string} city 
      * @param {number} postalCode 
      * @param {string} street 
      * @param {number} number 
      * @returns 
      */
-    function createBettingPlaceFromRawData(countryName, countryOdds, continent, 
+    function createBettingPlaceFromRawData(countryName, countryOdds, CONTINENT, 
                             city, postalCode, street, number) {
-        var country = new Country(countryName, countryOdds, continent);
+        var country = new Country(countryName, countryOdds, CONTINENT);
         var address = new Address(country, city, postalCode, street, number);
         // return new BettingPlace(address);
         return createBettingPlace(address);
@@ -491,12 +491,12 @@
 
     function testCreateBettingPlace() {
         var bettingPlc1 = createBettingPlaceFromRawData("Zambia", 3, 
-        Continent.AFRICA, "SomeCityInZambia", 33444, "Zambian Street", 99);
+        CONTINENT.AFRICA, "SomeCityInZambia", 33444, "Zambian Street", 99);
         console.log(bettingPlc1);
         var sonja = new Person("Sonja", "Musicki", new Date(11, 5, 1979));
-        var plyr1 = new Player(sonja, 100, new Country("SR", 1.5, Continent.EUROPE));
+        var plyr1 = new Player(sonja, 100, new Country("SR", 1.5, CONTINENT.EUROPE));
         var vlada = new Person("Vlada", "Bognar", new Date(14, 5, 1979));
-        var plyr2 = new Player(vlada, 200, new Country("SR", 1.5, Continent.EUROPE));
+        var plyr2 = new Player(vlada, 200, new Country("SR", 1.5, CONTINENT.EUROPE));
         bettingPlc1.addPlayer(plyr1);
         bettingPlc1.addPlayer(plyr2);
         console.log(bettingPlc1);
@@ -508,9 +508,9 @@
 
     
     function finalTest() {
-        var country1 = new Country("Serbia", 2, Continent.EUROPE);
-        var country2 = new Country("UK", 1.5, Continent.EUROPE);
-        var country3 = new Country("USA", 1, Continent.NORTH_AMERICA);
+        var country1 = new Country("Serbia", 2, CONTINENT.EUROPE);
+        var country2 = new Country("UK", 1.5, CONTINENT.EUROPE);
+        var country3 = new Country("USA", 1, CONTINENT.NORTH_AMERICA);
 
         var person1 = new Person("Sonja", "Tralala", new Date(22, 2, 2002));
         var person2 = new Person("John", "Smith", new Date(1, 2, 1990));
@@ -523,11 +523,11 @@
         var player4 = createPlayer(person4, 600, country1);
 
         // var player2 = createPlayerFromRawData("John", "Smith", 1, 2, 1990,
-        // 100, "UK", 2, Continent.EUROPE);
+        // 100, "UK", 2, CONTINENT.EUROPE);
         // var player3 = createPlayerFromRawData("Benny", "Goodman", 1, 2, 1920,
-        // 100, "USA", 2, Continent.NORTH_AMERICA);
+        // 100, "USA", 2, CONTINENT.NORTH_AMERICA);
         // var player4 = createPlayerFromRawData("Vlada", "Vladić", 14, 4, 1940,
-        //     500, "Serbia", 2, Continent.EUROPE);
+        //     500, "Serbia", 2, CONTINENT.EUROPE);
 
         // console.log("Listing players...........");
         // console.log(JSON.stringify(player1));
@@ -540,9 +540,9 @@
         var address2 = new Address("SR", "Novi Sad", 21000, "Zmaj Jovina", 1);
         
         // var bettingPlc1 = createBettingPlaceFromRawData("Serbia", 2, 
-        // Continent.EUROPE, "Belgrade", 11000, "Nemanjina", 11);
+        // CONTINENT.EUROPE, "Belgrade", 11000, "Nemanjina", 11);
         // var bettingPlc2 = createBettingPlaceFromRawData("Serbia", 2, 
-        // Continent.EUROPE, "Novi Sad", 21000, "Zmaj Jovina", 5);
+        // CONTINENT.EUROPE, "Novi Sad", 21000, "Zmaj Jovina", 5);
 
         var bettingPlc1 = createBettingPlace(address1);
         var bettingPlc2 = createBettingPlace(address2);
