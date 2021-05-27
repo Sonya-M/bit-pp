@@ -82,6 +82,12 @@
         console.log(str);
     }
 
+    function testFn(callBackFn, inputArray) {
+        for (var i = 0; i < inputArray.length; i++) {
+            log(inputArray[i] + " -> " + callBackFn(inputArray[i]));
+        }
+    }
+
     "use strict";
 //  1. Write a functional expression that duplicates each element of a given array.
 //  Input: [2, 4, 7, 11, -2, 1] Output: [2, 2, 4, 4, 7, 7, 11, 11,  -2, -2, 1, 1]
@@ -286,10 +292,326 @@
         }
         testFilterArray();
     })();
-// c. Write a function that expects an array and a callback function
-// that filters out some of the elements. Use functions defined in a) or
-// b) to test it. 
-
+//  6. 
+//  a. Write a list (array) of products you usually buy in the supermarket.
+//  Write a price and name for each product.For example,
+//   [
+//  {name: ‘apples’, price: 100}, {name: ‘milk’, price: 80}, {name:’bananas’,
+//  price: 150}
+//  ]
+//  b. Write a function that calculates the total price of your shopping list. 
+//  c. Write a function that calculates the average product price of your shopping list. Print this value with the precision of three decimals. 
+// d. Write a function that prints out the name of the most expensive product on your shopping list. Write the name in uppercase. 
     
+    (function ex6() {
+
+        // connecting entries in arrays using indices
+        var prodNames = ["apples", "milk", "bananas"];
+        var prices = [100, 80, 150]; 
+
+        /**
+         * Product constructor
+         * @param {string} name 
+         * @param {number} price 
+         */
+        function Product(name, price) {
+            this.name = name;
+            this.price = price;
+        }
+
+        // the way we did it before Objects...
+        var products = [];
+        for (var i = 0; i < prodNames.length; i++) {
+            products.push(new Product(prodNames[i], prices[i]));
+        }
+        // log(products); // test
+
+        /**
+         * ShoppingList constructor + instance methods
+         */
+        function ShoppingList() {
+            this.list = [];
+            /**
+             * Adds given product to this ShoppingList
+             * @param {Product} product 
+             */
+            this.addProduct = function (product) {
+                if (product instanceof Product) this.list.push(product);
+                else throw Error("ShoppingList.addProduct: argument must be " +
+                    "a Product object");
+            }
+            /**
+             * @returns a list of products in this shopping list
+             */
+            this.getList = function () {
+                return this.list;
+            }
+            /**
+             * @returns the total price of products in this shopping list
+             */
+            this.total = function () {
+                var sum = 0;
+                this.list.forEach(function (prod) {
+                    sum += prod.price;
+                });
+                return sum;
+            }
+            /**
+             * @returns The average price of products in this ShoppingList
+             */
+            this.avgPrice = function () {
+                return this.total() / this.list.length;
+            }
+            // this.totalUsingForLoop = function () {
+            //     var sum = 0;
+            //     for (var i = 0; i < this.list.length; i++) {
+            //         sum += this.list[i].price;
+            //     }
+            //     return sum;
+            // }
+
+            /**
+             * @returns the most expensive Product in this ShoppingList
+             */
+            this.getMostExpensive = function () {
+                var max = null;
+                var maxPrice = -Infinity;
+                this.list.forEach(function (prod) {
+                    if (prod.price > maxPrice) {
+                        maxPrice = prod.price;
+                        max = prod;
+                    }
+                });
+                return max;
+            }
+        }
+        
+        var shopList = new ShoppingList();
+        for (var i = 0; i < prodNames.length; i++) {
+            shopList.addProduct(new Product(prodNames[i], prices[i]));
+        }
+        log("..............");
+        log("Shopping list:");
+        log("..............");
+        log(shopList.getList()); // test
+        log("Total price: " + shopList.total());
+        // log("Total price: " + shopList.totalUsingForLoop());
+
+        log("Average price: " + shopList.avgPrice());
+        log("The most expensive product: ");
+        log(shopList.getMostExpensive().name.toUpperCase());
+
+    })();
+
+//  7. 
+// a. Write a function that checks if a given string is written in all capitals.
+    (function ex7() {
+        
+        function allCaps(str) {
+            return (str.length > 0 && str === str.toUpperCase());
+        }
+
+        // test allCaps()
+        log("Testing allCaps()..............................");
+        log(allCaps("BASE"));
+        log(allCaps("baSe"));
+        log(allCaps("b"));
+        log(allCaps(""));
+
+// b. Write a function that checks if a given string contains any digits.
+        function hasDigits(str) {
+            // Construct a REGEX:
+            /////////////////////
+            // using a regular expression literal, which consists of a pattern
+            // enclosed between slashes, or Or calling the constructor function
+            // of the RegExp object, as follows: let re = new RegExp('ab+c');
+            let regex = /[0-9]/;
+            // another way:
+            // regex = new RegExp("[0-9]");
+            return str.search(regex) >= 0;
+        }
+        log("Testing hasDigits()...............................");
+        var input = ["Benny2", "10", "blablabla"];
+        testFn(hasDigits, input);
+        // log(hasDigits("Benny2"));
+        // log(hasDigits("10"));
+        // log(hasDigits("blablabla"));
+
+        // c. Write a function that checks if a given string is a valid hexadecimal color.
+        function isHex(str) {
+            let regexNonHex = new RegExp("[^0-9a-fA-F#]");
+            // let regexSpace = new RegExp("\s");
+            return (
+                str.charAt(0) === "#" 
+                && (str.length === 7 || str.length === 4)
+                && str.substring(1).search("#") < 0
+                && str.search(regexNonHex) < 0);
+        }
+        log("Testing isHex()....................................");
+        var hexInput = ["#23FFgg", "#123456", "#ffaa21", "# 11223", "22233ff",
+                        "##233aa"];
+        testFn(isHex, hexInput);
+
+// d. Write a function that checks if a given number belongs to the interval
+// from 1900 to 2018. 
+        
+        /**
+         * @param {number} start start value, inclusive
+         * @param {number} end end value, inclusive
+         * @param {number} n number to test
+         * @returns true if n is in given range [start, end]
+         */
+        function inInterval(n, start=1900, end=2018) {
+            return (start <= n && end >= n);
+        }
+
+        log(inInterval(10, 11, 0));
+        log(inInterval(0, 0, 0));
+        log(inInterval(1, 2, 1));
+        log(inInterval(1, 1, 1));
+
+// e. Write a function named validator that returns an object with properties
+// stringValidator, passwordValidator, colorValidator, and yearValidator
+// referencing the functions from a) to d).
+        
+        function Validator() {
+            this.stringValidator = function (str) {
+                return allCaps(str);
+            }
+            this.passwordValidator = function (str) {
+                return (hasDigits(str));
+            }
+            this.colorValidator = function (str) {
+                return isHex(str);
+            }
+            this.yearValidator = function (year) {
+                return inInterval(year);
+            }
+        }
+
+        // test Validator
+        log("Testing Validator.........................");
+        var validator = new Validator();
+        log(validator.stringValidator("CAPS"));
+        log(validator.passwordValidator("2dfg"));
+        log(validator.colorValidator("#fff"));
+        log(validator.yearValidator(1991));
+
+})();
+//  8. Write a function that calculates a number of days to your birthday.
+//  Input: 25 February Output: 5 days
+    
+    (function ex8() {
+
+// Date constructor syntax:
+//////////////////////////
+// new Date()
+// new Date(value)
+// new Date(dateString)
+// new Date(year, monthIndex)
+// new Date(year, monthIndex, day)
+// new Date(year, monthIndex, day, hours)
+// new Date(year, monthIndex, day, hours, minutes)
+// new Date(year, monthIndex, day, hours, minutes, seconds)
+// new Date(year, monthIndex, day, hours, minutes, seconds, milliseconds)
+
+// valueOf()
+////////////
+// The Date.valueOf() method returns the primitive value of a Date object
+// as a number data type, the number of milliseconds since midnight
+// 01 January, 1970 UTC.
+
+// other usefull methods:
+// var d = new Date(1469433907836);
+// d.toLocaleString(); // expected output: "7/25/2016, 1:35:07 PM"
+// d.toLocaleDateString(); // expected output: "7/25/2016"
+// d.toDateString();  // expected output: "Mon Jul 25 2016"
+// d.toTimeString(); // expected output: "13:35:07 GMT+0530 (India Standard Time)"
+// d.toLocaleTimeString(); // expected output: "1:35:07 PM"
+    
+        /**
+         * converts milliseconds to days
+         * @param {number} millisecs 
+         * @returns number of days converted from milliseconds
+         */
+        function milliSecsToDays(millisecs) {
+            return Math.round(millisecs / (1000 * 60 * 60 * 24));
+        }
+
+        /** 
+         * @param {Date} bday 
+         * @returns number of days to bday; if bday has passed, the return
+         * value is negative.
+         */
+        function daysToBday(bday) {
+            if (!bday instanceof Date) throw new Error("daysToBday: argument " +
+                "must be a Date object");
+            var date = new Date();
+            // introduce `now` variable to set the hours:mins:secs to 00:00:00
+            var now = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            var nextBday = new Date(now.getFullYear(), bday.getMonth(),
+                bday.getDate());
+            // The Date.valueOf() method returns the primitive value of a Date object
+            // as a number data type, the number of milliseconds since midnight
+            // 01 January, 1970 UTC.
+            return milliSecsToDays(nextBday.valueOf() - now.valueOf());
+        }
+        // test daysToBday:
+        log("Testing miliseconds to days...............");
+        log(milliSecsToDays(86400000));
+        log("Testing days to birthday..................");
+        var date1 = new Date(2021, 4, 27);
+        log(daysToBday(date1));
+        var date2 = new Date(1991, 5, 26);
+        log(daysToBday(date2));
+
+    })();
+ 
+//  9. Write a function that for a given departure and arrival time
+//   calculates the time the trip takes. Input: 8:22:13 11:43:22 Output: 3
+//   hours 21 minutes 9 seconds
+    (function ex9() {
+
+        /**
+         * 
+         * @param {string} startTime string in the format hh:mm:ss
+         * @param {string} endTime string in the format hh:mm:ss
+         * @returns the difference between startTime and endTime in a string format
+         */
+        function calculateTimeDifference(startTime, endTime) {
+            // convert to hours, get remainder(for hours)
+            // convert remainder for hours to minutes, get remainder for minutes
+            // convert remainder for minutes to seconds - remainder should be 0
+
+            var hours, mins, secs;
+            [hours, mins, secs] = startTime.split(":"); // Destructuring assignment!!!
+            log("hrs, mins, secs: " + hours +", " + mins + ", " + secs);
+            return 0; //stub
+        }
+        calculateTimeDifference("1:4:13");
+
+    })();
+    
+   
+//  10.
+// a. Write a constructor function that creates points in space. Each
+// point in space has its own x, y, and z coordinate. For example, (3,
+// 5, 1) can be a point in space.
+
+// b. Write a function that calculates the distance between two points
+// in the space. 
+
+//  11.
+// a. Write a function that generates a random integer value between 5
+// and 20. b. Write a function that generates a random integer value
+// between 50 and 100. c. Write a function which expects a number and a
+// callback generator function and returns an array of numbers produced
+// by the generator function.
+
+
+
+//  12.  Write a function that shuffles the elements of a given array. Input:
+//  	   [3, 6, 11, 2, 9, 1] Output: [6, 2, 9, 1, 3, 11]  (it can be any
+//  	   random permutation of the given array)
 
 })();

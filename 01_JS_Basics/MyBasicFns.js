@@ -34,6 +34,16 @@ function roundToNDecPlaces(n, dec) {
     return n/mul;
 }
 
+/**
+ * @param {number} low 
+ * @param {number} hi 
+ * @returns a random integer in range [low, hi]
+ */
+ function randomInt(low, hi) {
+    return Math.floor(Math.random() * hi) + low;
+}
+
+
 ////////////////////
 // TEST FUNCTIONS //
 ////////////////////
