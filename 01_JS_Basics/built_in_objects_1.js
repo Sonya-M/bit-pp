@@ -579,31 +579,21 @@
          * @returns the difference between startTime and endTime in a string format
          */
         function calculateTimeDifference(startTime, endTime) {
-            // convert to hours, get remainder(for hours)
-            // convert remainder for hours to minutes, get remainder for minutes
-            // convert remainder for minutes to seconds - remainder should be 0
 
-            // var hours, mins, secs;
-            // [hours, mins, secs] = startTime.split(":"); // Destructuring assignment!!!
-            // log("hrs, mins, secs: " + hours + ", " + mins + ", " + secs);
-
-
-            /// TODO: BUGGY1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             var hours, mins, secs;
             [hours, mins, secs] = startTime.split(":");
-            console.log(hours, mins, secs);
+            hours = parseInt(hours); mins = parseInt(mins); secs = parseInt(secs);
+            // console.log(hours, mins, secs);
             var startInSecs = timeToSeconds(hours, mins, secs);
-            console.log(startInSecs);
+            // console.log(startInSecs);
 
             var hours2, mins2, secs2;
             [hours2, mins2, secs2] = endTime.split(":");
-            console.log(hours2, mins2, secs2);
+            hours2 = parseInt(hours2); mins2 = parseInt(mins2); secs2 = parseInt(secs2);
+            // console.log(hours2, mins2, secs2);
             var endInSecs = timeToSeconds(hours2, mins2, secs2);
-            console.log(endInSecs);
-            log(endInSecs - startInSecs);
-
-            
-
+            // console.log(endInSecs);
+            // log(endInSecs - startInSecs);
             return timeFromSeconds(endInSecs - startInSecs);
         }
 
@@ -617,13 +607,18 @@
         function timeToSeconds(hrs, mins, secs) {
             return secs + mins * 60 + hrs * 3600;
         }
+
         /**
          * 
          * @param {number} seconds time in seconds
          * @returns a string representation of time in the format HH:MM:SS
          */
         function timeFromSeconds(seconds) {
+            // convert to hours, get remainder(for hours)
+            // convert remainder for hours to minutes, get remainder for minutes
+            // convert remainder for minutes to seconds - remainder should be 0
             var hrs = Math.floor(seconds / 3600);
+            // var mins = Math.floor((seconds - (hrs * 3600)) / 60);
             var mins = Math.floor((seconds % 3600) / 60);
             var secs =seconds - (hrs * 3600 + mins * 60);
             var timeString = [];
@@ -632,7 +627,7 @@
             timeString[2] = (formatToNDigits(secs, 2));
             return timeString.join(":");
 
-         }
+        }
 
         /**
          * @param {number} num whose number of digits is less than or equal to nDigits
@@ -647,7 +642,7 @@
 
         // console.log(timeFromSeconds(3600))
         // log(formatToNDigits(3, 2));
-        console.log("Test time from seconds: " + timeFromSeconds(3600));
+        console.log("Test time from seconds: " + timeFromSeconds(91432));
         console.log(calculateTimeDifference("8:22:13", "11:43:22"));
     })();
     
@@ -656,9 +651,45 @@
 // a. Write a constructor function that creates points in space. Each
 // point in space has its own x, y, and z coordinate. For example, (3,
 // 5, 1) can be a point in space.
-
 // b. Write a function that calculates the distance between two points
 // in the space. 
+    
+    (function ex10() {
+
+        /**
+         * a Point constructor
+         * @param {number} x x-coordinate of this point
+         * @param {number} y y-coordinate of this point
+         * @param {number} z z-coordinate of this point
+         */
+        function Point(x, y, z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            /**
+             * @param {Point} that 
+             * @returns the distance between this point and given point
+             */
+            this.distTo = function (that) {
+            // d(p1, p2) = sqrt((x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2)
+                return Math.sqrt(Math.pow(that.x - this.x, 2) + Math.pow(that.y - this.y, 2) + Math.pow(that.z - this.z, 2));
+            }
+        }
+
+        function testPoint() {
+            console.log("Testing Point..............................");
+            var p1 = new Point(2, 3, 1);
+            var p2 = new Point(8, -5, 0);
+            console.log(p1);
+            console.log(p2);
+            console.log("Distance between points:")
+            console.log(p1.distTo(p2).toFixed(2));
+        }
+
+        testPoint();
+
+    })();
+
 
 //  11.
 // a. Write a function that generates a random integer value between 5
@@ -666,11 +697,76 @@
 // between 50 and 100. c. Write a function which expects a number and a
 // callback generator function and returns an array of numbers produced
 // by the generator function.
+    /**
+     * @param {number} low 
+     * @param {number} hi 
+     * @returns a random integer in range [low, hi)
+     */
+    function randomInt(low, hi) {
+        return Math.floor(Math.random() * (hi-low) + low);
+    }
+
+    function getNValuesFrom(n, callBackGeneratorFn, ...callBackArgs) {
+        var result = [];
+        for (var i = 0; i < n; i++) {
+            result.push(callBackGeneratorFn(callBackArgs))
+        }
+        return result;
+    }
+
+    function randIntWrapper(argsAsArray) {
+        return randomInt(argsAsArray[0], argsAsArray[1]);
+    }
+    function testRandomInt() {
+        console.log("Testing random int...................");
+        console.log("From 5 to 20;")
+        var lo = 5;
+        var hi = 21;
+        var n = 100;
+        console.log("" + getNValuesFrom(n, randIntWrapper, lo, hi));
+        console.log("From 50 to 100;")
+        lo = 50;
+        hi = 101;
+        console.log("" + getNValuesFrom(n, randIntWrapper, lo, hi));
+    }
+    
+    testRandomInt();
 
 
 
 //  12.  Write a function that shuffles the elements of a given array. Input:
 //  	   [3, 6, 11, 2, 9, 1] Output: [6, 2, 9, 1, 3, 11]  (it can be any
 //  	   random permutation of the given array)
+    
+    /**
+     * Uses Knuth's shuffle algorithm to shuffle the array (uses O(n)) 
+     * source: Princeton's Algorithms course
+     *   In iteration i, pick integer r between 0 and i uniformly at random.
+     *   swap a[i] and a[r].
+     * @param {Array} array 
+     * @returns a new array with randomly shuffled entries
+     */
+    function shuffle(array) {
+        // var shuffled = [];
+        // create a copy of given array:
+        var shuffled = [...array]; // only use for 1-d arrays!
+        // console.log(shuffled);
+        for (var i = 0; i < array.length; i++) {
+            var randIndex = randomInt(0, i + 1);
+            // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
+            [shuffled[i], shuffled[randIndex]] = [shuffled[randIndex], shuffled[i]];
+        }
+        return shuffled;
+    }
 
-})();
+    function testShuffle() {
+        var array = [3, 6, 11, 2, 9, 1];
+        var repetitions = 10;
+        console.log("Testing shuffle in " + repetitions + " repetitions....................");
+        for (var i = 0; i < repetitions; i++) {
+            console.log("" + shuffle(array));
+        }
+    }
+    testShuffle();
+
+})(); 

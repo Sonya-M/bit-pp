@@ -24,6 +24,9 @@ function roundTo2DecPlaces(n) {
 
 // rounds n to dec decimal places
 // CAVEAT: NOT THAT PRECISE - for arguments (2.4999, 3) returns 2.5
+// YOU SHOULD RELLY USE Number.toPrecision(N_DECIMAL_PLACES);
+// (1.2222222).toFixed(2) returns '1.22' AS A STRING, 
+// so you'd need parseFloat() as well
 function roundToNDecPlaces(n, dec) {
     var mul = 1;
     for (var i = 0; i < dec; i++) {
@@ -68,6 +71,26 @@ function testRoundTo2DecPlaces() {
         console.log(n[i] + " >>> " + roundTo2DecPlaces(n[i]));
     }
 }
+
+/**
+     * Uses Knuth's shuffle algorithm to shuffle the array (uses O(n)) 
+     * source: Princeton's Algorithms course
+     *   In iteration i, pick integer r between 0 and i uniformly at random.
+     *   swap a[i] and a[r].
+     * @param {Array} array 
+     * @returns a new array with randomly shuffled entries
+     */
+ function shuffle(array) {
+    var shuffled = [...array]; // only use for 1-d arrays!
+    // console.log(shuffled);
+    for (var i = 0; i < array.length; i++) {
+        var randIndex = randomInt(0, i + 1);
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
+        [shuffled[i], shuffled[randIndex]] = [shuffled[randIndex], shuffled[i]];
+    }
+    return shuffled;
+}
+
 
 function testRoundToNDecPlaces() {
     var n = [3.4568734, 2.4999, 2.12345, 2.00, 2.01, 2.99];
