@@ -77,6 +77,7 @@
 
 
 (function built_in_objects_1() {
+    "use strict";
 
     function log(str) {
         console.log(str);
@@ -88,12 +89,11 @@
         }
     }
 
-    "use strict";
 //  1. Write a functional expression that duplicates each element of a given array.
 //  Input: [2, 4, 7, 11, -2, 1] Output: [2, 2, 4, 4, 7, 7, 11, 11,  -2, -2, 1, 1]
     (function ex1() {
         /**
-         * Duplicates each aelement of a given array.
+         * Duplicates each element of a given array.
          * @param {Array} arr 
          */
         function duplicate(arr) {
@@ -104,11 +104,24 @@
             });
             return dup;
         }
+
+        // this is probably much worse performancewise, 
+        // but let's practice splice as well :)
+        function duplicate2(arr) {
+            for (var i = 0; i < arr.length; i++) {
+                arr.splice(i, 0, arr[i]);
+                i++; // splice modifies array, here increasing its length by 1 
+                // in each iteration of the for loop
+            }
+        }
         function test() {
             log("Testing 1...............................");
             var a = [2, 4, 7, 11, -2, 1];
+            var a2 = [2, 4, 7, 11, -2, 1];
             var b = duplicate(a);
+            duplicate2(a2);
             log(b);
+            log(a2)
         }
         test();
     })();
@@ -205,10 +218,19 @@
             });
             return { minValue: smallest, minLastIndex: smallestIndex };
         }
+        function findSmallest2(arr) {
+            var min = Math.min(...arr);
+            var minIndex = arr.lastIndexOf(min);
+            return {
+                minValue: min,
+                minLastIndex: minIndex
+            };
+        }
         function test() {
             log("Testing 4..........................");
             var input = [1, 4, -2, 11, 8, 1, -2, 3];
             log(findSmallest(input));
+            log(findSmallest2(input));
         }
         test();
 
@@ -241,12 +263,20 @@
             });
             return allSmaller;
         }
+        function getAllLess2(arr, val) {
+            var copy = [...arr];
+            copy.sort(function (a, b) { return a - b; });
+            // TODO: CANNOT USE INDEXOF, BECAUSE THE VAL IS NOT NECESSARILY IN THE ARRAY!
+            log("copy.indexOf(val): " + copy.indexOf(val));
+            return copy.slice(0, copy.indexOf(val)); // NO GO (see above)
+        }
 
         (function testGetAllLess() {
             log("Testing 5a.............................");
             var input = [2, 3, 8, -2, 11, 4];
             var val = 6;
             log(getAllLess(input, val));
+            // log(getAllLess2(input, val));
 
         })();
 
@@ -528,6 +558,16 @@
 // d.toDateString();  // expected output: "Mon Jul 25 2016"
 // d.toTimeString(); // expected output: "13:35:07 GMT+0530 (India Standard Time)"
 // d.toLocaleTimeString(); // expected output: "1:35:07 PM"
+//////////////////////////////////////////////
+// notice the way a Date object is constructed:
+// >var helperDate = new Date(0, 0)
+// undefined
+// >helperDate.getFullYear()
+// 1900
+// >helperDate.getMonth()
+// 0
+// >helperDate.getDate()
+// 1
     
         /**
          * converts milliseconds to days
@@ -571,6 +611,10 @@
 //   calculates the time the trip takes. Input: 8:22:13 11:43:22 Output: 3
 //   hours 21 minutes 9 seconds
     (function ex9() {
+
+        //////////////////
+        // The raw way  //
+        //////////////////
 
         /**
          * 
@@ -617,10 +661,11 @@
             // convert to hours, get remainder(for hours)
             // convert remainder for hours to minutes, get remainder for minutes
             // convert remainder for minutes to seconds - remainder should be 0
+
             var hrs = Math.floor(seconds / 3600);
             // var mins = Math.floor((seconds - (hrs * 3600)) / 60);
             var mins = Math.floor((seconds % 3600) / 60);
-            var secs =seconds - (hrs * 3600 + mins * 60);
+            var secs = seconds - (hrs * 3600 + mins * 60);         
             var timeString = [];
             timeString[0] = (formatToNDigits(hrs, 2));
             timeString[1] = (formatToNDigits(mins, 2));
@@ -640,10 +685,66 @@
             return str;
         }
 
+        ///////////////////
+        // Using Date()  //
+        ///////////////////
+        /**
+         * Assumes departure < arrival by no more than 23 hrs 59 mins 59 secs
+         * @param {Date} departure 
+         * @param {Date} arrival 
+         * @returns a string representing the time difference between 2 given dates
+         */
+        function getTimeDifference(departure, arrival) {
+            var diffInMillisecs = arrival.getTime() - departure.getTime();
+            var helperDate = new Date(departure.getFullYear(), departure.getMonth(), departure.getDate());
+            // time for helperDate is by default set to midnight;
+            // year, month, date will be ignored
+            var diffDate = new Date(helperDate.getTime() + diffInMillisecs);
+            // now you have the difference in hours, mins and secs
+            var output = [];
+            output.push(diffDate.getHours() + " hours ");
+            output.push(diffDate.getMinutes() + " minutes ");
+            output.push(diffDate.getSeconds() + " seconds");
+            return output.join(" ");
+        }
+        /**
+         * Converts milliseconds to hours, minutes and seconds. The remainder
+         * milliseconds are discarded
+         * @param {number} milliseconds 
+         * @returns an array in the format [hours, mins, secs];
+         */
+        function millisToHrsMinsSecs(milliseconds) {
+            var secs = Math.floor((milliseconds / 1000) % 60) % 60;
+            var mins = Math.floor((milliseconds / 1000) / 60) % 60;
+            var hrs = Math.floor(((milliseconds / 1000) / 60) / 60);
+            return [hrs, mins, secs];
+        }
+
+        // testing.........................
         // console.log(timeFromSeconds(3600))
         // log(formatToNDigits(3, 2));
         console.log("Test time from seconds: " + timeFromSeconds(91432));
         console.log(calculateTimeDifference("8:22:13", "11:43:22"));
+        console.log("Testing function using Date() only...............");
+        var dep = new Date(2021, 5, 31, 8, 22, 13);
+        var arr = new Date(2021, 5, 31, 11, 43, 22);
+        
+        console.log("Time diff with input from specs: "
+        + getTimeDifference(dep, arr));
+        console.log("Now testing with different input..................");
+        dep.setHours(dep.getHours() - 1);
+        dep.setMinutes(dep.getMinutes() + 1);
+        console.log(getTimeDifference(dep, arr));
+        var dep2 = new Date(2020, 1, 1, 0, 0, 0);
+        var arr2 = new Date(2020, 1, 1, 23, 59, 59);
+        console.log(getTimeDifference(dep2, arr2));
+
+        console.log("Testing millisToHrsMinsSecs.........................");
+        var input = [2000, 20000, 200000, 547894, 5478941];
+        for (var i = 0; i < input.length; i++) {
+            console.log(input[i] + " millis -> " + millisToHrsMinsSecs(input[i]));
+        }
+
     })();
     
    
@@ -769,4 +870,4 @@
     }
     testShuffle();
 
-})(); 
+})();
