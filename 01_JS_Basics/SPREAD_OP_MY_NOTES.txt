@@ -7,7 +7,7 @@ spread operator for shallow object copy:
 
         // spread for copying an array
         let arr = [1, 2, 3];
-        let arr2 = [...arr]; // like arr.slice()
+        let arr2 = [...arr]; // similar to arr.slice()
 
         arr2.push(4);
         //  arr2 becomes [1, 2, 3, 4]
@@ -19,3 +19,19 @@ spread operator for shallow object copy:
 
 
     </code>
+
+for deep copy, use `JSON.parse(JSON.stringify(obj))`
+
+SAFE NESTED MUTATION USING DEEP CLONE
+------------------------------------
+      <code>
+        const person = {
+            name: 'Bobo',
+            address: { street: 'Main Street', number: 123 }
+        };
+
+        const deepPersonClone = JSON.parse(JSON.stringify(person));
+        deepPersonClone.address.number = 456;
+
+        console.log({ person, deepPersonClone });
+      </code>

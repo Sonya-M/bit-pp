@@ -24,7 +24,7 @@ function roundTo2DecPlaces(n) {
 
 // rounds n to dec decimal places
 // CAVEAT: NOT THAT PRECISE - for arguments (2.4999, 3) returns 2.5
-// YOU SHOULD RELLY USE Number.toPrecision(N_DECIMAL_PLACES);
+// YOU SHOULD REALLY USE THE BUILT-IN FNS FOR THIS
 // (1.2222222).toFixed(2) returns '1.22' AS A STRING, 
 // so you'd need parseFloat() as well
 function roundToNDecPlaces(n, dec) {
