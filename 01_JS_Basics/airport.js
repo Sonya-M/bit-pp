@@ -171,7 +171,7 @@
      * @returns a string representation of given date, containing only the month,
      * date and year 
      */
-    function getFullDateFromDateString(date) {
+    function getDateString(date) {
         // var dateVals = date.toString().split(" ");
         // var result = dateVals[1] + " " + dateVals[2] + " " + dateVals[3];
 
@@ -357,7 +357,7 @@
         }
         this.getData = function () {
             var result = [];
-            var date = getFullDateFromDateString(this.date);
+            var date = getDateString(this.date);
             // result.push(date + ", " + this.route.getData() + "\n");
             result.push(date + ", " + this.route.getCodedData() + "\n");
             for (var i = 0; i < this.passengers.length; i++) {
