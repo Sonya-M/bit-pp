@@ -99,7 +99,7 @@
     function Genre(name) {
         this.name = name;
         this.getData = function () {
-            return (this.name[0] + this.name[name.length - 1]).toUpperCase();
+            return (this.name[0] + this.name[this.name.length - 1]).toUpperCase();
         }
     }
 

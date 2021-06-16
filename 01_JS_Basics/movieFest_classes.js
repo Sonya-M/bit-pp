@@ -1,0 +1,243 @@
+// refactored version of movieFestival.js, rewritten
+// using the sweetest syntactic sugar, class syntax
+
+(function () {
+    
+    // utility functions
+     /**
+     * @param {Date} date 
+     * @returns a string representation of given date, containing only the date, month and year
+     */
+      function getDateString(date) {
+        var result = date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+        return result;
+    }
+    
+    class Genre {
+        /**
+         * Genre constructor
+         * @param {string} name 
+         */
+        constructor(name) {
+            this.name = name;
+        }
+        getData() {
+            return (this.name[0] + this.name[this.name.length - 1]).toUpperCase();
+        }
+    }
+
+    class Movie {
+        /**
+         * Movie constructor
+         * @param {string} title 
+         * @param {Genre} genre 
+         * @param {number} length 
+         * @throws Error if duration is not a number
+         */
+        constructor(title, genre, duration) {
+            this.title = title;
+            this.genre = genre;
+            if (typeof duration !== "number") {
+                throw new Error("Movie constructor: duration must be a number");
+            }
+            this.duration = duration;
+        }
+        getData() {
+            return `${this.title}, ${this.duration} min, ${this.genre.getData()}`;
+        }
+    }
+
+    class Program {
+        /**
+         * Program constructor
+         * @param {Date} date 
+         */
+        constructor(date) {
+            this.date = date;
+            this.movieList = [];
+            this.MAX_PROGRAM_LENGTH = 480; // max program length in minutes
+        }
+        /**
+         * @returns the number of movies in this program
+         */
+        nMovies() {
+            return this.movieList.length;
+        }
+        /**
+         * Adds given movie to this Program.
+         * There can be no more than 4 movies of the same genre, and the length
+         * of all movies in a list can be no longer than this.MAX_PROGRAM_LENGTH 
+         * @param {Movie} movie 
+         */
+        addMovie(movie) {
+            if (this.getNMoviesOfGenre(movie.genre) === 4) {
+                console.log("Cannot add more than 4 movies of the same genre!");
+                return;
+            }
+            if (this.getProgramLength() + movie.duration > this.MAX_PROGRAM_LENGTH) {
+                console.log(`Program length cannot be more than ${this.MAX_PROGRAM_LENGTH / 60} hours long`);
+                return;
+            }
+            this.movieList.push(movie);
+        }
+        /**
+         * @param {Genre} genre 
+         * @returns the number of movies in this Program of given genre
+         */
+        getNMoviesOfGenre(genre) {
+            // var sum = 0;
+            // for (var i = 0; i < this.movieList.length; i++) {
+            //     if (this.movieList[i].genre.name === genre.name) sum++;
+            // }
+            // return sum;
+
+            // TODO: CHECK THIS
+            return this.movieList.reduce(function (sum, current) {
+                if (current.genre.name === genre.name) {
+                   return  sum + 1;
+                }
+            }, 0);
+        }
+        getProgramLength() {
+            // var sum = 0;
+            // for (var i = 0; i < this.movieList.length; i++) {
+            //     sum += this.movieList[i].duration;
+            // }
+            // return sum;
+            // TODO: check this
+            return this.movieList.reduce(function (accumulator, current) {
+                return accumulator + current.duration;
+            }, 0);
+        }
+        getData() {
+            let result = `${getDateString(this.date)}, ${this.getProgramLength()} min\n`;
+            for (var i = 0; i < this.movieList.length; i++) {
+                result += `\t\t ${this.movieList[i].getData()}\n`;
+            }
+            return result;
+        }
+    }
+
+    class Festival {
+        /**
+         * @param {string} name 
+         * @param {number} maxNMovies if undefined, defaults to Infinity
+         */
+        constructor(name, maxNMovies) {
+            this.name = name;
+            if (!maxNMovies) this.maxMovies = Infinity;
+            else if (typeof maxNMovies !== "number") {
+                // try to get a number from string first
+                maxNMovies = parseInt(maxNMovies);
+                if (isNaN(maxNMovies)) {
+                    console.log("invalid argument: maxNMovies - number of movies will be unlimited");
+                    maxNMovies = Infinity;
+                }
+            }
+            this.maxMovies = maxNMovies;
+            this.programList = [];
+        }
+        /**
+         * Adds program to this Festival, if the number of movies in
+         * given program doesn't exceed this.maxMovies
+         * @param {Program} program 
+         */
+        addProgram(program) {
+            if (this.totalMovies() + program.nMovies() > this.maxMovies) {
+                console.log("Max number of movies would be exceeded!");
+                return;
+            }
+            this.programList.push(program);
+        }
+        /**
+         * @returns The total number of movies in this festivals program list
+         */
+        totalMovies() {
+            return this.programList.reduce(function (accumulator, current) {
+                return accumulator + current.nMovies();
+            }, 0);
+        }
+        getData() {
+            if (this.programList.length === 0) {
+                return this.name + "\n\tProgram to be announced";
+            }
+            var result = `${this.name} has ${this.totalMovies()} movie titles\n`;
+            for (let i = 0; i < this.programList.length; i++) {
+                result += `\t${this.programList[i].getData()}`;
+            }
+            return result;
+        }
+    }
+    
+
+    /**
+     * @param {string} title 
+     * @param {number} duration 
+     * @param {string} genre 
+     * @returns a Movie instance from given params
+     */
+     function createMovie(title, duration, genre) {
+        var g = new Genre(genre);
+        return new Movie(title, g, duration);
+    }
+    // console.log(createMovie("X-men", 200, "horror").getData());
+    /**
+     * @param {Date} date 
+     * @returns a Program instance
+     */
+    function createProgram(date) {
+        return new Program(date);
+    }
+
+    // let g1 = new Genre("drama");
+    // console.log(g1.getData())
+
+    ////////////////////////////////////
+    // test ............................
+    var date1 = new Date("2021-07-01");
+    var date2 = new Date("2021-07-02");
+    // console.log(createProgram(date1).getData());
+
+    var f1 = new Festival("Cannes", 10);
+    var p1 = createProgram(date1);
+    var p2 = createProgram(date2);
+    var m1 = createMovie("The Shawshank Redemption", 130, "comedy");
+    var m2 = createMovie("Deadpool", 90, "action");
+    var m3 = createMovie("Shrek", 120, "comedy");
+    var m4 = createMovie("Spaceballs", 100, "comedy");
+    var m6 = createMovie("Lala", 10, "comedy");
+    var m5 = createMovie("Haha", 90, "comedy");
+    var m7 = createMovie("Boohoo", 50, "comedy");
+    // var m7 = createMovie("Haha", "90", "comedy"); // throws error
+    var m8 = createMovie("Hahahaha", 10, "comedy");
+
+
+    p1.addMovie(m1);
+    p1.addMovie(m2);
+    p2.addMovie(m3);
+    p2.addMovie(m4);
+    p2.addMovie(m5);
+    p2.addMovie(m6);
+    p2.addMovie(m8); // the 5th comedy, should not be added
+    f1.addProgram(p1);
+    f1.addProgram(p2);
+    console.log(f1.getData());
+
+    var f2 = new Festival("Empty festival");
+    console.log(f2.getData());
+
+    var f3 = new Festival("The Weekend Festival", "6");
+    var p3 = createProgram(date2);
+    p3.addMovie(m2);
+    p3.addMovie(m3);
+    p3.addMovie(m4);
+    p3.addMovie(m5);
+    p3.addMovie(m7);
+
+    f3.addProgram(p1);
+    f3.addProgram(p3);
+    console.log(f3.getData());
+    ////////////////////////////////////
+
+
+})();
