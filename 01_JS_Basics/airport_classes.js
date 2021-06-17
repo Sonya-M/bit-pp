@@ -137,41 +137,27 @@
 // the total number of business category passengers for the airport to final
 // output.
 
+// rewritten using classes
 
 (function () {
     "use strict";
-
     /**
-     * 
      * @param {number} lo 
      * @param {number} hi 
-     * @returns number in range [lo, hi); if hi < lo, swaps the two args
+     * @returns random number in range [lo, hi); if hi < lo, swaps the two args
      */
-    function randomInteger(lo, hi) {
+     function randomInteger(lo, hi) {
         if (lo > hi) {
             [lo, hi] = [hi, lo];
         }
         return Math.floor(Math.random() * (hi - lo)) + lo;
     }
-
-    function testRandomInteger() {
-        var lo = 10;
-        var hi = 12;
-        var nTrials = 10;
-        var result = [];
-        for (var i = 0; i < nTrials; i++) {
-            result.push(randomInteger(hi, lo));
-        }
-        console.log(result);
-    }
-
     /**
-     * 
      * @param {Date} date 
      * @returns a string representation of given date, containing only the month,
      * date and year 
      */
-    function getDateString(date) {
+     function getDateString(date) {
         // var dateVals = date.toString().split(" ");
         // var result = dateVals[1] + " " + dateVals[2] + " " + dateVals[3];
 
@@ -179,13 +165,12 @@
 
         return result;
     }
-
     /**
      * Assumes given string contains at least 2 consonants!!!
      * @param {string} string 
      * @returns a string consisting of the first and last consonant of given string 
      */
-    function getFirstAndLastCons(string) {
+     function getFirstAndLastCons(string) {
         var vowels = "aeiou";
         string = string.toLowerCase();
         var i = 0;
@@ -194,139 +179,159 @@
         i = string.length - 1;
         while (vowels.indexOf(string[i]) >= 0 && i >= 0) i--;
         result += string[i];
-
         return result.toUpperCase();
     }
     
-    /**
-     * 
-     * @param {string} name 
-     * @param {string} surname 
-     */
-    function Person(name, surname) {
-        this.name = name;
-        this.surname = surname;
-        this.getData = function () {
+    class Person {
+        /**
+         * @param {string} name 
+         * @param {string} surname 
+         */
+        constructor(name, surname) {
+            this.name = name;
+            this.surname = surname;
+        }
+        /**
+         * @returns a string representation of this person
+         */
+        getData() {
             return this.name + " " + this.surname;
         }
         /**
-         * 
          * @param {Person} that 
          * @returns true if this person's name and surname are identical to
          * that persons name and surname, false otherwise
          */
-        this.equals = function (that) {
-            return that instanceof Person && this.name === that.name
-                && this.surname === that.surname;
+        equals(that) {
+            return (that instanceof Person
+                    && this.name === that.name
+                    && this.surname === that.surname);
         }
     }
 
-    /**
-     * 
-     * @param {number} number if not provided, defaults to a random number
-     * between 10 and 100
-     * @param {string} category can have one of 2 values: "b" for business, 
-     * "e" for economy; if none is provided, defaults to "E"
-     */
-    function Seat(number, category) {
-        if (!category || category.toUpperCase() !== "B") {
-            this.category = "E";
-        } else {
-            this.category = category.toUpperCase();
-        }
-        if (number) this.number = number;
-        else this.number = randomInteger(10, 101);
+    class Seat {
         /**
          * 
-         * @returns a string representation of this seat
+         * @param {number} number if not provided, defaults to a random number
+         * between 10 and 100
+         * @param {string} category can have one of 2 values: "b" for business, 
+         * "e" for economy; if none is provided, defaults to "E"
          */
-        this.getData = function() {
-            return this.number + ", " + this.category;
+        constructor(number, category) {
+            if (!category || category.toUpperCase() !== "B") {
+                this.category = "E";
+            } else {
+                this.category = category.toUpperCase();
+            }
+            if (number && isFinite(parseInt(number))) this.number = number;
+            else this.number = randomInteger(10, 101);
         }
-        this.getVerboseData = function () {
+        /**
+         * @returns string representation of this seat
+         */
+        getData() {
+            return `${this.number}, ${this.category}`;
+        }
+        /**
+         * @returns detailed string representation of this seat
+         */
+        getVerboseData() {
             var cat;
-            if (this.category === "B") cat = "business";
-            else cat = "economy";
-            return this.number + ", " + cat;
-        }
-    }
-    
-    /**
-     * 
-     * @param {Person} person 
-     * @param {Seat} seat 
-     */
-    function Passenger(person, seat) {
-        this.person = person;
-        this.seat = seat;
-        /**
-         * 
-         * @returns a string representation of this passenger
-         */
-        this.getData = function () {
-            // return this.seat.getData() + ", " + this.person.getData();
-            return this.seat.getVerboseData() + ", " + this.person.getData();
-
+            this.category === "B" ? cat = "business" : cat = "economy";
+            return `${this.number}, ${cat}`;
         }
     }
 
-    /**
-     * 
-     * @param {string} from 
-     * @param {string} to 
-     */
-    function Route(from, to) {
-        this.from = from;
-        this.to = to;
+    class Passenger extends Person {
+        /**
+         * @param {string} name 
+         * @param {string} surname 
+         * @param {Seat} seat 
+         */
+        constructor(name, surname, seat) {
+            super(name, surname);
+            this.seat = seat;
+        }
+        /**
+         * @returns string representation of this passenger
+         */
+        getData() {
+            return `${this.seat.getVerboseData()}, ${super.getData()}`; //!!!
+        }
+
+    }
+
+    // var p1 = new Passenger("Sonja", "Musicki", new Seat(1, "B"));
+    // console.log(p1.getData())
+
+    class Route {
         /**
          * 
-         * @returns a string representation of this route
+         * @param {string} from 
+         * @param {string} to 
          */
-        this.getData = function () {
-            return this.from + " - " + this.to;
+        constructor(from, to) {
+            this.from = from;
+            this.to = to;
         }
-        this.getCodedData = function () {
+        /**
+         * @returns string representation of this route
+         */
+        getData() {
+            return `${this.from} - ${this.to}`;
+        }
+        /**
+         * 
+         * @returns string representing coded data for this route
+         */
+        getCodedData() {
             var origin = getFirstAndLastCons(this.from);
             var destination = getFirstAndLastCons(this.to);
-            return origin + " - " + destination;
+            return `${origin} - ${destination}`;
         }
     }
 
-    /**
-     * 
-     * @param {Route} route 
-     * @param {Date} date 
-     */
-    function Flight(route, date) {
-        this.route = route;
-        this.date = date;
-        this.passengers = [];
-        this.seatsTaken = []; // keep track of taken seats, updated in the
-        // this.addPassenger method
-
+    class Flight {
         /**
          * 
+         * @param {Route} route 
+         * @param {Date} date 
+         */
+        constructor(route, date) {
+            this.route = route;
+            this.date = date;
+            this.passengers = [];
+            // boolean array; seat numbers are represented by array indices+1
+            // seatsTaken[i] === true if seat i is taken, false otherwise
+            this.seatsTaken = new Array(101);
+            // seat at index 0 is ignored, but just in case...:
+            this.seatsTaken[0] = true;
+            for (let i = 1; i < this.seatsTaken.length; i++) {
+                this.seatsTaken[i] = false;
+            }
+        }
+        /**
          * @param {Passenger} passenger 
          * @returns the index of the passenger in this flights passenger list,
          * or -1 if the passenger is not on the list
          */
-        this.getPassengerIndex = function (passenger) {
-            for (var i = 0; i < this.passengers.length; i++) {
-                if (this.passengers[i].person.equals(passenger.person)) {
+        getPassengerIndex(passenger) {
+            for (let i = 0; i < this.passengers.length; i++) {
+                if (this.passengers[i].equals(passenger)) {
                     return i;
                 }
             }
             return -1;
         }
         /**
-         * if given passenger is an instance of Passenger, and there are less than
+         * if there are less than
          * 100 passengers on this flight in total, adds it to this  flight's list
          * of passengers. 
          * @param {Passenger} passenger 
          * @returns true if the given passenger was added to the list, false
          * otherwise
          */
-        this.addPassenger = function (passenger) {
+        addPassenger(passenger) {
             if (this.passengers.length === 100) {
                 console.log("Flight full! Cannot add more than 100 passengers.");
                 return false;
@@ -335,59 +340,62 @@
             if (passengerIndex !== -1) {
                 // just remove it from the list, you'll add it in the next if block,
                 // which will take care of the seat problem as well
-                var seatIndex = this.seatsTaken.indexOf(passenger.seat.number);
-                this.seatsTaken.splice(seatIndex, 1);
+                this.seatsTaken[this.passengers[passengerIndex].seat.number] = false; // first free up the seat
                 this.passengers.splice(passengerIndex, 1);
             }
-            if (passenger instanceof Passenger) {
-                // two passengers cannot have the same seat number, so:
-                var seatNumber = passenger.seat.number;
-                while (this.seatsTaken.indexOf(seatNumber) >= 0) {
-                    var seatNumber = randomInteger(10, 100);
-                    // passenger.seat = new Seat(seatNumber, passenger.seat.category);
-                    passenger.seat.number = seatNumber;
+            let seatNumber = passenger.seat.number; // seat indices start from 0
+            while (this.seatsTaken[seatNumber]) {
+                // to avoid too much randomInteger() calls when more seats are taken
+                if (this.passengers.length < 30) {
+                    seatNumber = randomInteger(10, 100);
+                } else {
+                    seatNumber = 1;
+                    while (this.seatsTaken[seatNumber]) seatNumber++;
                 }
-                this.passengers.push(passenger);
-                this.seatsTaken.push(passenger.seat.number);
-                return true;
-            } else {
-                return false;
             }
-            // TODO: If a passenger with the same full name exists in a flight
-            // list, you should replace the existing passenger’s data with new
-            // data (e.g. it can happen when a passenger changes seats).
+            passenger.seat.number = seatNumber;
+            this.passengers.push(passenger);
+            this.seatsTaken[seatNumber] = true;
+            return true;
         }
-        this.getData = function () {
+        /**
+         * @returns string representation of this flight
+         */
+        getData() {
             var result = [];
-            var date = getDateString(this.date);
-            // result.push(date + ", " + this.route.getData() + "\n");
-            result.push(date + ", " + this.route.getCodedData() + "\n");
-            for (var i = 0; i < this.passengers.length; i++) {
-                result.push("\t" + this.passengers[i].getData() + "\n");
+            result.push(getDateString(this.date));
+            result.push(`, ${this.route.getCodedData()}\n`);
+            for (let i = 0; i < this.passengers.length; i++) {
+                result.push(`\t${this.passengers[i].getData()}\n`);
             }
             return result.join("");
         }
-        this.getNPassengers = function () {
+        /**
+         * @returns number of passengers on this flight
+         */
+        getNPassengers() {
             return this.passengers.length;
         }
     }
 
-    /**
-     * 
-     * @param {string} name 
-     * @param {Array<Flight>} flightList array of Flight objects; if not given,
-     * defaults to an empty array
-     */
-    function Airport(name, flightList) {
-        this.name = name;
-        if (flightList && Array.isArray(flightList)) this.flights = flightList;
-        else this.flights = [];
+    class Airport {
         /**
-         * Adds given flight to this airport's list of flights
+         * @param {string} name 
+         * @param {Array<Flight>} flightList array of Flight objects; if not given,
+         * defaults to an empty array
+         */
+        constructor(name, flightList) {
+            this.name = name;
+            if (flightList && Array.isArray(flightList)) this.flights = flightList;
+            else this.flights = [];
+        }
+        /**
+         * If given flight is instance of Fligt,
+         * adds it to this airport's list of flights
          * @param {Flight} flight
          * @returns true if given flight was added to the list, false otherwise 
          */
-        this.addFlight = function (flight) {
+        addFlight(flight) {
             if (flight instanceof Flight) {
                 this.flights.push(flight);
                 return true;
@@ -395,24 +403,22 @@
                 return false;
             }
         }
-        this.getTotalPassengers = function () {
-            var sum = 0;
-            for (var i = 0; i < this.flights.length; i++) {
-                sum += this.flights[i].getNPassengers();
-            }
-            return sum;
+        /**
+         * @returns total number of passengers this airport's flight list
+         */
+        getTotalPassengers() {
+            // TODO: check this
+            return this.flights.reduce(function (accumulator, current) {
+                return accumulator + current.getNPassengers();
+            }, 0);
         }
-        this.getData = function () {
-            var result = "Airport: " + this.name + ", total passengers: "  
-                + this.getTotalPassengers() + "\n\n";
-            for (var i = 0; i < this.flights.length; i++) {
-                result += "\t" + this.flights[i].getData();
-                result += "\n";
+        getData() {
+            var result = `Airport: ${this.name}, total passengers: ${this.getTotalPassengers()}\n\n`;
+            for (let i = 0; i < this.flights.length; i++) {
+                result += `\t${this.flights[i].getData()}\n`;
             }
             return result;
-
         }
-
     }
 
     /**
@@ -421,7 +427,7 @@
      * @param {Date} date 
      * @returns an instance of Flight, created from given arguments
      */
-    function createFlight(route, date) {
+        function createFlight(route, date) {
         var origin = route.slice(0, route.indexOf("-"));
         origin = origin.trim(); // trim whitespace
         var destination = route.slice(route.lastIndexOf("-") + 1, route.length);
@@ -440,57 +446,10 @@
      * @returns 
      */
     function createPassenger(firstName, lastName, seatNum, seatCategory) {
-        return new Passenger(new Person(firstName, lastName),
+        return new Passenger(firstName, lastName,
             new Seat(seatNum, seatCategory));
     }
 
-    // test all
-    // testRandomInteger();
-    // var seat = new Seat();
-    // var seat2 = new Seat();
-    // var seat3 = new Seat(20, "b");
-    // var testSeat = new Seat(200, "bla");
-    // console.log("Test seat: " + testSeat.getData());
-    // console.log(seat);
-    // console.log("Seat3: " + seat3.getData());
-    // var ps = new Person("John", "Snow");
-    // var ps2 = new Person("Jane", "Doe");
-    // console.log(ps.getData())
-    // console.log(seat.getData())
-    // var psngr = new Passenger(ps, seat);
-    // console.log(psngr.getData());
-    // var route1 = new Route("Belgrade", "Munich");
-    // console.log(route1);
-    // console.log(route1.getData());
-    // var flight1 = new Flight(route1, new Date());
-    // console.log(flight1);
-    // console.log(flight1.getData());
-    // flight1.addPassenger(psngr);
-    // console.log(flight1.getData());
-    // var passenger2 = new Passenger(ps2, seat2);
-    // flight1.addPassenger(passenger2);
-    // console.log(flight1.getData());
-    // var flight2 = createFlight("Paris - Rome", new Date());
-    // console.log(flight2);
-    // console.log(flight2.getData());
-    // var passenger3 = createPassenger("Sonja", "Musicki", 1, "b");
-    // console.log(passenger3);
-    // console.log(passenger3.getData());
-
-    // test getFirstAndLastCons
-    // console.log(getFirstAndLastCons("Belgrade"));
-    // console.log(getFirstAndLastCons("Paris"));
-
-    // test Person.equals()
-    // var person1 = new Person("sonja", "musicki");
-    // var person2 = new Person("sonja", "musicki");
-    // var person3 = new Person("blabla", "truć");
-    // console.log(person1.equals(person2));
-    // console.log(person3.equals(person2));
-
-    
-    /////////////////////////////
-    
     var airport1 = new Airport("Nikola Tesla");
 
     var flight1 = createFlight("Belgrade - Paris", new Date(2017, 9, 25));
@@ -526,7 +485,4 @@
     // console.log(airport1);
     console.log(airport1.getData());
 
-    // test Flight.hasPassenger()
-    // console.log(flight2.getPassengerIndex(passenger5));
-    // console.log(flight2.getPassengerIndex(passenger1));
 })();

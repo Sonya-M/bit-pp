@@ -139,6 +139,7 @@
         }
     }
 
+
     class Program {
         /**
          * Program constructor
@@ -147,7 +148,7 @@
         constructor(date) {
             this.date = date;
             this.movieList = [];
-            this.MAX_PROGRAM_LENGTH = 480; // max program length in minutes
+            this.maxProgramLength = 480; // max program length in minutes
         }
         /**
          * @returns the number of movies in this program
@@ -158,7 +159,7 @@
         /**
          * Adds given movie to this Program.
          * There can be no more than 4 movies of the same genre, and the length
-         * of all movies in a list can be no longer than this.MAX_PROGRAM_LENGTH 
+         * of all movies in a list can be no longer than this.maxProgramLength 
          * @param {Movie} movie 
          */
         addMovie(movie) {
@@ -166,8 +167,8 @@
                 console.log("Cannot add more than 4 movies of the same genre!");
                 return;
             }
-            if (this.getProgramLength() + movie.duration > this.MAX_PROGRAM_LENGTH) {
-                console.log(`Program length cannot be more than ${this.MAX_PROGRAM_LENGTH / 60} hours long`);
+            if (this.getProgramLength() + movie.duration > this.maxProgramLength) {
+                console.log(`Program length cannot be more than ${this.maxProgramLength / 60} hours long`);
                 return;
             }
             this.movieList.push(movie);
