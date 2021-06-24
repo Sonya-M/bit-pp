@@ -59,7 +59,8 @@ Employee.prototype.getSalary = function () {
  * @returns {string} representation of this employee
  */
 Employee.prototype.getData = function () {
-    return `${Person.prototype.getFullName.call(this)}, salary: ${this.getSalary()}`;
+    // return `${Person.prototype.getFullName.call(this)}, salary: ${this.getSalary()}`; //same result as below:
+    return `${this.getFullName()}, salary: ${this.getSalary()}`;
 }
 Object.defineProperty(Employee.prototype, "SALARY_INCREASE", {
     value: .1,
@@ -91,6 +92,7 @@ Object.defineProperty(Developer.prototype, "constructor", {
     enumerable: false,
     writable: true
 });
+// Developer.prototype.constructor = Developer; // !!! instead of `Object.defineProperty` 
 /**
  * @returns {string} this developer's specialization
  */
@@ -132,6 +134,7 @@ Manager.prototype.changeDepartment = function (newDept) {
 ///////////////////////////////////////////////////////////////////////////////
 
 var emp1 = new Employee("Jo", "Smith", "Joes job", 100);
+console.log(emp1.getFullName());
 console.log(emp1.getData());
 console.log("Employee.prototype.constructor: " + Employee.prototype.constructor);
 console.log("Increasing emp1's salary....");

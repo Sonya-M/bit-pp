@@ -1,0 +1,42 @@
+[
+    {
+        "date": "2021-07-01",
+        "movieList": [
+            {
+                "title": "Raiders of the Lost Ark",
+                "genre": "action",
+                "duration": 115
+            },
+            {
+                "title": "In The Mood for Love",
+                "genre": "drama",
+                "duration": 97
+            },
+            {
+                "title": "There Will Be Blood",
+                "genre": "drama",
+                "duration": 158
+            }
+        ]
+    },
+    {
+        "date": "2021-07-02",
+        "movieList": [
+            {
+                "title": "Citizen Kane",
+                "genre": "drama",
+                "duration": 119
+            },
+            {
+                "title": "It Happened One Nigh",
+                "genre": "drama",
+                "duration": 105
+            },
+            {
+                "title": "Casablanca",
+                "genre": "drama",
+                "duration": 100
+            }
+        ]
+    }
+]

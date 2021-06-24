@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/main.css">
+    <title>Movie Form Practical</title>
+</head>
+<body>
+    <div class="container">
+        <fieldset id="movieFieldset">
+            <legend>Create movie</legend>
+            
+            <form action="success.html" id="movieForm">
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title">
+                
+                <label for="duration">Length (min)</label>
+                <input type="number" name="duration" id="duration">
+                
+                <label for="genre">Genre</label>
+                <select name="genre" id="genre" form="movieForm">
+                    <option value="">-</option>
+                    <option value="action">Action</option>
+                    <option value="comedy">Comedy</option>
+                    <option value="crime">Crime</option>
+                    <option value="drama">Drama</option>
+                    <option value="horror">Horror</option>
+                    <option value="romance">Romance</option>
+                    <option value="sf">SF</option>
+                    <option value="thriller">Thriller</option>
+                    <option value="western">Western</option>
+                    <option value="other">Other</option>
+                </select>
+                <div class="errorMsgDiv" id="message">
+
+                </div>
+                <input type="button" class="formBtn" id="createMovieBtn" value="Create movie">
+            </form>
+            <div id="movies">
+
+            </div>
+        </fieldset>
+
+        <fieldset id="programFieldset">
+            <legend>Program</legend>
+            <form action="success.html" id="programForm">
+                <label for="progDate">Date</label>
+                <input type="date" name="progDate" id="progDate">
+                <input type="button" class="formBtn" id="createProgBtn" value="Create program">
+                <div id="programs">
+
+                </div>
+                <label for="selectMovie">Movie</label>
+                <select name="selectMovie" id="selectMovie">
+                    <option value="">-</option>
+                    <!-- will be filled out as movies are created -->
+                </select>
+                <label for="selectProg">Program</label>
+                <select name="selectProg" id="selectProg">
+                    <option value="">-</option>
+                    <!-- will be filled out as programs are created -->
+                </select>
+                <div class="errorMsgDiv" id="progMsgDiv">
+
+                </div>
+                <input type="button" class="formBtn" id="addMovieToProgBtn" value="Add movie to program">
+            </form>
+        </fieldset>
+        <div class="listing">
+            <div>
+                <h2>Movies</h2>
+                <ul id="movieListing">
+                </ul>
+            </div>
+            <div>
+                <h2>Programs</h2>
+                <ul id="programListing">
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="./js/entities.js"></script>
+    <script src="./js/forms.js"></script>
+</body>
+</html>

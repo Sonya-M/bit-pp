@@ -73,7 +73,7 @@ Object.defineProperty(WebApp.prototype, "constructor", {
 /**
  * @returns {string} string representation of this web app
  */
-WebApp.prototype.getData = function () {
+WebApp.prototype.getData = function () { //TODO
     return `${App.prototype.getData.call(this)}
 technologies: ${(this.technologies).join(", ")}; 
 url: ${this.url}`;

@@ -178,18 +178,18 @@
          * @returns the number of movies in this Program of given genre
          */
         getNMoviesOfGenre(genre) {
-            // var sum = 0;
-            // for (var i = 0; i < this.movieList.length; i++) {
-            //     if (this.movieList[i].genre.name === genre.name) sum++;
-            // }
-            // return sum;
+            var sum = 0;
+            for (var i = 0; i < this.movieList.length; i++) {
+                if (this.movieList[i].genre.name === genre.name) sum++;
+            }
+            return sum;
 
-            // TODO: CHECK THIS
-            return this.movieList.reduce(function (sum, current) {
-                if (current.genre.name === genre.name) {
-                   return  sum + 1;
-                }
-            }, 0);
+            // TODO: CHECK THIS - BUGGY
+            // return this.movieList.reduce(function (sum, current) {
+            //     if (current.genre.name === genre.name) {
+            //        return  sum + 1;
+            //     }
+            // }, 0);
         }
         getProgramLength() {
             // var sum = 0;

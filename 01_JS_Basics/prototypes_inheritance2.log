@@ -1,0 +1,41 @@
+WebApp.__proto__
+ƒ () { [native code] }
+webApp1.__proto__
+App {getData: ƒ, reactBased: ƒ, constructor: ƒ}getData: ƒ ()arguments: nullcaller: nulllength: 0name: ""prototype: {constructor: ƒ}__proto__: ƒ ()[[FunctionLocation]]: prototypes_inheritance2.js:76[[Scopes]]: Scopes[1]reactBased: ƒ ()constructor: ƒ WebApp(name, url, technologies, licence, stars)__proto__: getData: ƒ ()isCCLicence: ƒ ()like: ƒ ()showStars: ƒ ()constructor: ƒ App(name, licence, nStars)__proto__: Object
+Object.getPrototypeOf(WebApp)
+ƒ () { [native code] }
+Object.getPrototypeOf(App)
+ƒ () { [native code] }
+WebApp.prototype 
+App {getData: ƒ, reactBased: ƒ, constructor: ƒ}getData: ƒ ()reactBased: ƒ ()constructor: ƒ WebApp(name, url, technologies, licence, stars)__proto__: Object
+WebApp.prototype === webApp1.__proto__
+true
+Object.getPrototypeOf(WebApp) === Object.getPrototypeOf(App)
+true
+//TODO: ??????? WHY? HOW?
+undefined
+App.isPrototypeOf(WebApp)
+false
+App.prototype.isPrototypeOf(WebApp)
+false
+App.prototype.isPrototypeOf(WebApp.prototype)
+true
+//TODO
+undefined
+// use __proto_ & Object.getPrototypeOf() on obj instances???
+undefined
+webApp1.__proto__.__proto__ === app1.__proto__
+true
+webApp1.constructor
+ƒ WebApp(name, url, technologies, licence, stars) {
+    App.call(this, name, licence, stars);
+    this.url = url;
+    this.technologies = technologies;
+}
+app1.constructor
+ƒ App(name, licence, nStars) {
+    this.name = name;
+    this.licence = licence;
+    if (nStars) this.nStars = nStars;
+    else this.nStars = 0;
+}

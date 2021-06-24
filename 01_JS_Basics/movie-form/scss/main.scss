@@ -1,0 +1,104 @@
+$fontStack: "Helvetica neue", Arial, Helvetica, sans-serif;
+$buttonCol: rgb(6, 99, 94);
+$buttonFontCol: whitesmoke;
+$formWidth: 80%;
+$inputHeight: 1.8rem;
+$boxShadowDefaultCol: gray;
+$focusColor: dodgerblue;
+$invalidCol: red;
+$baseColor: #666;
+$maxBodyWidth: 960px;
+
+@mixin stylizedBox($color: $boxShadowDefaultCol) {
+    border-radius: 0.3rem;
+    box-shadow: 0 0 4px $color;
+}
+
+body {
+    box-sizing: border-box;
+    font-family: $fontStack;
+    max-width: $maxBodyWidth;
+    margin: 3rem auto;
+    color: $baseColor;
+}
+
+div.errorMsgDiv {
+    height: 2rem;
+    p.errorMsg {
+        color: $invalidCol;
+    }
+}
+
+fieldset {
+    width: $formWidth;
+    margin: 2rem auto;
+    padding: 1rem;
+    border: 1px solid rgb(202, 200, 200);
+    border-radius: 0.3rem;
+    // @include stylizedBox();
+    form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch;
+        align-content: center;
+        width: 100%;
+
+        input,
+        select {
+            width: 100%;
+            height: $inputHeight;
+            display: block;
+            outline: none;
+            border: none;
+            @include stylizedBox();
+            &.missing {
+                @include stylizedBox($invalidCol);
+            }
+            &:focus:not(input[type="button"]) {
+                @include stylizedBox($focusColor);
+            }
+            &[type="button"] {
+                margin: 1rem auto;
+                height: 1.5 * $inputHeight;
+                background-color: $buttonCol;
+                color: $buttonFontCol;
+                font-size: 1.1em;
+                &:hover {
+                    transform: scale(1.02);
+                    filter: brightness(1.1);
+                }
+                &:active {
+                    transform: scale(0.98);
+                    filter: brightness(0.93);
+                }
+            }
+        }
+        label {
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            width: 100%;
+            display: block;
+        }
+    }
+}
+
+div.listing {
+    width: $formWidth;
+    margin: 2rem auto;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    div {
+        flex-basis: 50%;
+    }
+    h2 {
+        text-align: center;
+    }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        font-size: 0.7em;
+    }
+}
