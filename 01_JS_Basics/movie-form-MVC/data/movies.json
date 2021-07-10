@@ -1,0 +1,47 @@
+[
+    {
+        "title": "Superman",
+        "genre": "action",
+        "duration": 100
+    },
+    {
+        "title": "Citizen Kane",
+        "genre": "drama",
+        "duration": 119
+    },
+    {
+        "title": "It Happened One Night",
+        "genre": "drama",
+        "duration": 105
+    },
+    {
+        "title": "Casablanca",
+        "genre": "drama",
+        "duration": 100
+    },
+    {
+        "title": "2001: A Space Odyssey",
+        "genre": "SF",
+        "duration": 141
+    },
+    {
+        "title": "The Godfather",
+        "genre": "thriller",
+        "duration": 175
+    },
+    {
+        "title": "Raiders of the Lost Ark",
+        "genre": "action",
+        "duration": 115
+    },
+    {
+        "title": "In The Mood for Love",
+        "genre": "drama",
+        "duration": 97
+    },
+    {
+        "title": "There Will Be Blood",
+        "genre": "drama",
+        "duration": 158
+    }
+]

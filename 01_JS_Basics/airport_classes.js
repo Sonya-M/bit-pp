@@ -139,14 +139,15 @@
 
 // rewritten using classes
 
+/* jshint esversion: 6 */
+
 (function () {
-    "use strict";
     /**
      * @param {number} lo 
      * @param {number} hi 
      * @returns random number in range [lo, hi); if hi < lo, swaps the two args
      */
-     function randomInteger(lo, hi) {
+    function randomInteger(lo, hi) {
         if (lo > hi) {
             [lo, hi] = [hi, lo];
         }
@@ -157,31 +158,27 @@
      * @returns a string representation of given date, containing only the month,
      * date and year 
      */
-     function getDateString(date) {
-        // var dateVals = date.toString().split(" ");
-        // var result = dateVals[1] + " " + dateVals[2] + " " + dateVals[3];
-
-        var result = date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
-
-        return result;
+    function getDateString(date) {
+        return date.getDate() + "." + (date.getMonth() + 1) +
+            "." + date.getFullYear();
     }
     /**
      * Assumes given string contains at least 2 consonants!!!
      * @param {string} string 
      * @returns a string consisting of the first and last consonant of given string 
      */
-     function getFirstAndLastCons(string) {
-        var vowels = "aeiou";
+    function getFirstAndLastCons(string) {
+        const vowels = "aeiou";
         string = string.toLowerCase();
-        var i = 0;
+        let i = 0;
         while (vowels.indexOf(string[i]) >= 0 && i < string.length) i++;
-        var result = string[i];
+        let result = string[i];
         i = string.length - 1;
         while (vowels.indexOf(string[i]) >= 0 && i >= 0) i--;
         result += string[i];
         return result.toUpperCase();
     }
-    
+
     class Person {
         /**
          * @param {string} name 
@@ -203,27 +200,26 @@
          * that persons name and surname, false otherwise
          */
         equals(that) {
-            return (that instanceof Person
-                    && this.name === that.name
-                    && this.surname === that.surname);
+            return (that instanceof Person &&
+                this.name === that.name &&
+                this.surname === that.surname);
         }
     }
 
     class Seat {
         /**
-         * 
          * @param {number} number if not provided, defaults to a random number
          * between 10 and 100
          * @param {string} category can have one of 2 values: "b" for business, 
          * "e" for economy; if none is provided, defaults to "E"
          */
-        constructor(number, category) {
-            if (!category || category.toUpperCase() !== "B") {
+        constructor(number, category = "E") {
+            if (category.toUpperCase() !== "B") {
                 this.category = "E";
             } else {
                 this.category = category.toUpperCase();
             }
-            if (number && isFinite(parseInt(number))) this.number = number;
+            if (number && Number.isFinite(parseInt(number))) this.number = number;
             else this.number = randomInteger(10, 101);
         }
         /**
@@ -236,8 +232,7 @@
          * @returns detailed string representation of this seat
          */
         getVerboseData() {
-            var cat;
-            this.category === "B" ? cat = "business" : cat = "economy";
+            let cat = (this.category === "B") ? "business" : "economy";
             return `${this.number}, ${cat}`;
         }
     }
@@ -260,10 +255,6 @@
         }
 
     }
-
-    // var p1 = new Passenger("Sonja", "Musicki", new Seat(1, "B"));
-    // console.log(p1.getData())
-
     class Route {
         /**
          * 
@@ -285,15 +276,12 @@
          * @returns string representing coded data for this route
          */
         getCodedData() {
-            var origin = getFirstAndLastCons(this.from);
-            var destination = getFirstAndLastCons(this.to);
-            return `${origin} - ${destination}`;
+            return `${getFirstAndLastCons(this.from)} - ${getFirstAndLastCons(this.to)}`;
         }
     }
 
     class Flight {
         /**
-         * 
          * @param {Route} route 
          * @param {Date} date 
          */
@@ -336,14 +324,14 @@
                 console.log("Flight full! Cannot add more than 100 passengers.");
                 return false;
             }
-            var passengerIndex = this.getPassengerIndex(passenger);
+            let passengerIndex = this.getPassengerIndex(passenger);
             if (passengerIndex !== -1) {
                 // just remove it from the list, you'll add it in the next if block,
                 // which will take care of the seat problem as well
                 this.seatsTaken[this.passengers[passengerIndex].seat.number] = false; // first free up the seat
                 this.passengers.splice(passengerIndex, 1);
             }
-            let seatNumber = passenger.seat.number; // seat indices start from 0
+            let seatNumber = passenger.seat.number;
             while (this.seatsTaken[seatNumber]) {
                 // to avoid too much randomInteger() calls when more seats are taken
                 if (this.passengers.length < 30) {
@@ -362,7 +350,7 @@
          * @returns string representation of this flight
          */
         getData() {
-            var result = [];
+            const result = [];
             result.push(getDateString(this.date));
             result.push(`, ${this.route.getCodedData()}\n`);
             for (let i = 0; i < this.passengers.length; i++) {
@@ -407,13 +395,12 @@
          * @returns total number of passengers this airport's flight list
          */
         getTotalPassengers() {
-            // TODO: check this
             return this.flights.reduce(function (accumulator, current) {
                 return accumulator + current.getNPassengers();
             }, 0);
         }
         getData() {
-            var result = `Airport: ${this.name}, total passengers: ${this.getTotalPassengers()}\n\n`;
+            let result = `Airport: ${this.name}, total passengers: ${this.getTotalPassengers()}\n\n`;
             for (let i = 0; i < this.flights.length; i++) {
                 result += `\t${this.flights[i].getData()}\n`;
             }
@@ -427,13 +414,13 @@
      * @param {Date} date 
      * @returns an instance of Flight, created from given arguments
      */
-        function createFlight(route, date) {
-        var origin = route.slice(0, route.indexOf("-"));
+    function createFlight(route, date) {
+        let origin = route.slice(0, route.indexOf("-"));
         origin = origin.trim(); // trim whitespace
-        var destination = route.slice(route.lastIndexOf("-") + 1, route.length);
+        let destination = route.slice(route.lastIndexOf("-") + 1, route.length);
         destination = destination.trim();
         // console.log(origin, destination);
-        var flight = new Flight(new Route(origin, destination), date);
+        const flight = new Flight(new Route(origin, destination), date);
         return flight;
     }
 
@@ -450,21 +437,21 @@
             new Seat(seatNum, seatCategory));
     }
 
-    var airport1 = new Airport("Nikola Tesla");
+    const airport1 = new Airport("Nikola Tesla");
 
-    var flight1 = createFlight("Belgrade - Paris", new Date(2017, 9, 25));
+    const flight1 = createFlight("Belgrade - Paris", new Date(2017, 9, 25));
     // console.log(flight1.getData());
-    var flight2 = createFlight("Barcelona - Belgrade", new Date(2017, 10, 11));
+    const flight2 = createFlight("Barcelona - Belgrade", new Date(2017, 10, 11));
     // console.log(flight2.getData());
 
     // create passengers:
-    var passenger1 = createPassenger("John", "Snow", 1, "b");
-    var passenger2 = createPassenger("Cersei", "Lannister", 2, "b");
-    var passenger3 = createPassenger("Daenerys", "Targaryen", 14);
-    var passenger4 = createPassenger("Tyron", "Lannister");
-    var passenger5 = createPassenger("Barry", "White", 14); // test same seat number
-    var passenger6 = createPassenger("Sonja", "Musicki", 2, "e");
-    var passenger7 = createPassenger("Sonja", "Musicki", 1, "B"); // test change of seat number
+    const passenger1 = createPassenger("John", "Snow", 1, "b");
+    const passenger2 = createPassenger("Cersei", "Lannister", 2, "b");
+    const passenger3 = createPassenger("Daenerys", "Targaryen", 14);
+    const passenger4 = createPassenger("Tyron", "Lannister");
+    const passenger5 = createPassenger("Barry", "White", 14); // test same seat number
+    const passenger6 = createPassenger("Sonja", "Musicki", 2, "e");
+    const passenger7 = createPassenger("Sonja", "Musicki", 1, "B"); // test change of seat number
 
 
 

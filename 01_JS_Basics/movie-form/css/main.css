@@ -65,7 +65,7 @@ fieldset form select[type="button"] {
 
 fieldset form input[type="button"]:hover,
 fieldset form select[type="button"]:hover {
-  transform: scale(1.02);
+  transform: scale(1.01);
   filter: brightness(1.1);
 }
 

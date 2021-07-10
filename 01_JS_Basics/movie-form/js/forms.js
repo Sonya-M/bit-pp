@@ -8,19 +8,24 @@ var lengthInput;
 var genreInput;
 var movieForm;
 var selectMovie;
+var selectProg;
 var programForm;
 var msgDiv;
 var progMsgDiv;
 var movieListing;
 var programListing;
 
+// lists of key-value pairs: keys are string representations of objects 
+// contained in value fields - e.g. key: "Superman, 100 min, AN"; 
+// value: Movie {title: "Superman", genre: Genre, duration: 100}
 var movieList = [];
 var programList = [];
 
 
+
 document.addEventListener("DOMContentLoaded", function () {
     initElementVariables();
-    // loadListFromJSON("../data/movies.json", createMovieFromLiteralAndAddItToList);
+    loadListFromJSON("../data/movies.json", createMovieFromLiteralAndAddItToList);
     // loadListFromJSON("../data/programs.json", createProgramFromLiteralAndAddItToList);
     setMinDateValue(programForm.querySelector("#progDate"));
     
@@ -45,10 +50,10 @@ function initElementVariables() {
     titleInput = document.getElementById("title");
     lengthInput = document.getElementById("duration");
     genreInput = document.getElementById("genre");
-    // add listener to btn
     selectMovie = document.getElementById("selectMovie");
     movieListing = document.getElementById("movieListing");
     programListing = document.getElementById("programListing");
+    selectProg = document.getElementById("selectProg");
 
 }
 /**
@@ -72,22 +77,51 @@ function loadListFromJSON(jsonURL, createAndAdd) {
         }
     }    
 }
+
+/**
+ * 
+ * @param {Movie} movie 
+ * @param {string} jsonFile file url
+ */
+// TODO: finish this!!!
+function saveMovieToJSON(movie, jsonFilePath) {
+    var movieLiteral = `{"title": ${movie.title}, "genre": ${movie.genre.name}, "duration": ${movie.duration}}`;
+
+    // sources: https://stackoverflow.com/questions/34156282/how-do-i-save-json-to-local-text-file
+    
+
+    // this pops up a save file dialog, but works for a single movie
+    // function download(content, filePath, contentType) {
+    //     var a = document.createElement("a");
+    //     var file = new Blob([content], { type: contentType });
+    //     a.href = URL.createObjectURL(file);
+    //     a.download = filePath;
+    //     a.click();
+    // }
+    // // TODO: this would overwrite all content
+    // download(movieLiteral, MOVIES_FROM_INPUT_FILE, "json");
+}
 /**
  * Creates a Movie instance from given object literal, adds it to movieList and displays it in the relevant containers
  * @param {Object} obj object literal with properties corresponding to a Movie instance
  */
-// TODO: BUGGY! Too complicated
+// TODO: test it - appears to be working :)
 function createMovieFromLiteralAndAddItToList(obj) {
     var movie = createMovie(obj.title, parseInt(obj.duration), obj.genre);
-    movieList.push(movie);
-    // refreshDisplayList(movieList, movieListing);
+    movieList.push({
+        key: movie.getData(),
+        value: movie
+    });
+    refreshDisplayList(movieList, movieListing);
+    refreshDisplayList(movieList, movieDiv);
+
     addMovieToProgramForm(movie, selectMovie);
 }
 /**
  * Creates a Program iinstance from given object literal, add it to programList and displays it in the relevant containers
  * @param {Object} obj object literal with properties corresponding to a Program instance
  */
-// TODO: BUGGY! Too complicated
+// TODO: Too complicated
 function createProgramFromLiteralAndAddItToList(obj) {
     var program = new Program(new Date(obj.date));
     for (let i = 0; i < obj.movieList.length; i++) {
@@ -96,16 +130,16 @@ function createProgramFromLiteralAndAddItToList(obj) {
     }
     programList.push(program);
     // refreshDisplayList(programList, programListing);
-    addProgramToForm(program, programForm.querySelector("#selectProg"));
+    addProgramToForm(program, selectProg);
 }
 
 function getInputAndAddMovieToProg() {
     if (!validateInput(programForm, progMsgDiv)) return;
     // TODO: get selected program and movie and add it to the list in a try block!!!
     try {
-        var selectedMovieString = programForm.querySelector("#selectMovie").value;
+        var selectedMovieString = selectMovie.value;
         console.log(selectedMovieString);
-        var selectedProgramString = programForm.querySelector("#selectProg").value;
+        var selectedProgramString = selectProg.value;
         console.log(selectedProgramString);
 
         var prog = getObjFromMap(programList, selectedProgramString);
@@ -222,7 +256,8 @@ function getValidDateInputString(date) {
     var month = date.getMonth() + 1;
     if (month < 10) month = "0" + month;
     var day = date.getDate();
-    if (day < 10) day = "0" + date;
+    if (day < 10) day = "0" + day;
+    console.log(`${date.getFullYear()}-${month}-${day}`);
     return `${date.getFullYear()}-${month}-${day}`;
 }
 

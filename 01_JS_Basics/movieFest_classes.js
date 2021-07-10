@@ -80,7 +80,7 @@
 
 // Handle error when you enter text instead of a number for movie length. Try to
 // stop program execution when this type of error happens.
- 
+
 // Modify the festival so that it accepts maximum number of movies. Handle the
 // error if text is inserted instead of a number for maximum number of movies. 
 
@@ -93,18 +93,20 @@
 // refactored version of movieFestival.js, rewritten
 // using the sweetest syntactic sugar, class syntax
 
+/* jshint esversion: 6 */
+
 (function () {
 
     // utility functions
-     /**
-     * @param {Date} date 
-     * @returns a string representation of given date, containing only the date, month and year
-     */
-      function getDateString(date) {
-        var result = date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+    /**
+    * @param {Date} date 
+    * @returns a string representation of given date, containing only the date, month and year
+    */
+    function getDateString(date) {
+        const result = date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
         return result;
     }
-    
+
     class Genre {
         /**
          * Genre constructor
@@ -178,8 +180,8 @@
          * @returns the number of movies in this Program of given genre
          */
         getNMoviesOfGenre(genre) {
-            var sum = 0;
-            for (var i = 0; i < this.movieList.length; i++) {
+            let sum = 0;
+            for (let i = 0; i < this.movieList.length; i++) {
                 if (this.movieList[i].genre.name === genre.name) sum++;
             }
             return sum;
@@ -188,12 +190,14 @@
             // return this.movieList.reduce(function (sum, current) {
             //     if (current.genre.name === genre.name) {
             //        return  sum + 1;
+            //     } else {
+            //        return sum; // perhaps like this? (still haven't tested it)
             //     }
             // }, 0);
         }
         getProgramLength() {
-            // var sum = 0;
-            // for (var i = 0; i < this.movieList.length; i++) {
+            // let sum = 0;
+            // for (let i = 0; i < this.movieList.length; i++) {
             //     sum += this.movieList[i].duration;
             // }
             // return sum;
@@ -204,7 +208,7 @@
         }
         getData() {
             let result = `${getDateString(this.date)}, ${this.getProgramLength()} min\n`;
-            for (var i = 0; i < this.movieList.length; i++) {
+            for (let i = 0; i < this.movieList.length; i++) {
                 result += `\t\t ${this.movieList[i].getData()}\n`;
             }
             return result;
@@ -254,14 +258,14 @@
             if (this.programList.length === 0) {
                 return this.name + "\n\tProgram to be announced";
             }
-            var result = `${this.name} has ${this.totalMovies()} movie titles\n`;
+            let result = `${this.name} has ${this.totalMovies()} movie titles\n`;
             for (let i = 0; i < this.programList.length; i++) {
                 result += `\t${this.programList[i].getData()}`;
             }
             return result;
         }
     }
-    
+
 
     /**
      * @param {string} title 
@@ -269,8 +273,8 @@
      * @param {string} genre 
      * @returns a Movie instance from given params
      */
-     function createMovie(title, duration, genre) {
-        var g = new Genre(genre);
+    function createMovie(title, duration, genre) {
+        const g = new Genre(genre);
         return new Movie(title, g, duration);
     }
     // console.log(createMovie("X-men", 200, "horror").getData());
@@ -287,23 +291,22 @@
 
     ////////////////////////////////////
     // test ............................
-    var date1 = new Date("2021-07-01");
-    var date2 = new Date("2021-07-02");
+    const date1 = new Date("2021-07-01");
+    const date2 = new Date("2021-07-02");
     // console.log(createProgram(date1).getData());
 
-    var f1 = new Festival("Cannes", 10);
-    var p1 = createProgram(date1);
-    var p2 = createProgram(date2);
-    var m1 = createMovie("The Shawshank Redemption", 130, "comedy");
-    var m2 = createMovie("Deadpool", 90, "action");
-    var m3 = createMovie("Shrek", 120, "comedy");
-    var m4 = createMovie("Spaceballs", 100, "comedy");
-    var m6 = createMovie("Lala", 10, "comedy");
-    var m5 = createMovie("Haha", 90, "comedy");
-    var m7 = createMovie("Boohoo", 50, "comedy");
-    // var m7 = createMovie("Haha", "90", "comedy"); // throws error
-    var m8 = createMovie("Hahahaha", 10, "comedy");
-
+    const f1 = new Festival("Cannes", 10);
+    const p1 = createProgram(date1);
+    const p2 = createProgram(date2);
+    const m1 = createMovie("The Shawshank Redemption", 130, "comedy");
+    const m2 = createMovie("Deadpool", 90, "action");
+    const m3 = createMovie("Shrek", 120, "comedy");
+    const m4 = createMovie("Spaceballs", 100, "comedy");
+    const m6 = createMovie("Lala", 10, "comedy");
+    const m5 = createMovie("Haha", 90, "comedy");
+    const m7 = createMovie("Boohoo", 50, "comedy");
+    // const m7 = createMovie("Haha", "90", "comedy"); // throws error
+    const m8 = createMovie("Hahahaha", 10, "comedy");
 
     p1.addMovie(m1);
     p1.addMovie(m2);
@@ -316,11 +319,11 @@
     f1.addProgram(p2);
     console.log(f1.getData());
 
-    var f2 = new Festival("Empty festival");
+    const f2 = new Festival("Empty festival");
     console.log(f2.getData());
 
-    var f3 = new Festival("The Weekend Festival", "6");
-    var p3 = createProgram(date2);
+    const f3 = new Festival("The Weekend Festival", "6");
+    const p3 = createProgram(date2);
     p3.addMovie(m2);
     p3.addMovie(m3);
     p3.addMovie(m4);

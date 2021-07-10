@@ -3,11 +3,11 @@
 //     1. Create constructor functions with properties representing the
 //         following: ◦ WebApp: name, url, technologies, licence, stars ◦
 //         MobileApp: name, platforms, licence, stars
- 
+
 //     2. All web applications should inherit methods: ◦ getData which prints
 //         out all the information ◦ reactBased which checks if one of the used
 //         technologies is React
- 
+
 //     3. All mobile applications should inherit methods: ◦ getData which prints
 //         out all the informations ◦ forAndroid which checks if one of the
 //         platforms the application is developed for is Android
@@ -16,6 +16,9 @@
 //         which checks if the licence of the application is CC (Creative
 //         Commons) ◦ like which increases the number of stars by one ◦
 //         showStars which prints out the number of stars 
+
+/* jshint esversion: 6 */
+
 
 /**
  * App constructor
@@ -33,25 +36,25 @@ function App(name, licence, nStars) {
  * @returns {boolean} true if this app's licence is CC, false otherwise
  */
 App.prototype.isCCLicence = function () {
-    return this.licence.toLowerCase() === "cc"
-        || this.licence.toLowerCase() === "creative commons";
-}
+    return this.licence.toLowerCase() === "cc" ||
+        this.licence.toLowerCase() === "creative commons";
+};
 /** Increments this app's number of stars by 1 */
 App.prototype.like = function () {
     this.nStars++;
-}
+};
 /**
  * @returns {number} number of stars for this app
  */
 App.prototype.showStars = function () {
     return this.nStars;
-}
+};
 /**
  * @returns {string} a string representation of this app
  */
 App.prototype.getData = function () {
     return `name: ${this.name}; licence: ${this.licence}; stars: ${this.nStars}`;
-}
+};
 /**
  * @param {string} name 
  * @param {string} url 
@@ -77,10 +80,10 @@ WebApp.prototype.getData = function () { //TODO
     return `${App.prototype.getData.call(this)}
 technologies: ${(this.technologies).join(", ")}; 
 url: ${this.url}`;
-}
+};
 WebApp.prototype.reactBased = function () {
     return this.technologies.join(" ").toLowerCase().indexOf("react") >= 0;
-}
+};
 
 /**
  * @param {string} name 
@@ -104,34 +107,34 @@ Object.defineProperty(MobileApp.prototype, "constructor", {
 MobileApp.prototype.getData = function () {
     return `${App.prototype.getData.call(this)}
 platforms: ${this.platforms.join(", ")}`;
-}
+};
 /**
  * @returns {boolean} true if app is developed for Android, false otherwise
  */
 MobileApp.prototype.forAndroid = function () {
     return this.platforms.join(" ").toLowerCase().indexOf("android") >= 0;
-}
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 // TESTING
 ///////////////////////////////////////////////////////////////////////////////
-var app1 = new App("app1", "CC", 1);
+const app1 = new App("app1", "CC", 1);
 console.log(app1);
 app1.like();
 console.log("App1 stars after calling like(): " + app1.showStars());
 console.log("app1.isCCLicence(): " + app1.isCCLicence());
 console.log(app1.getData());
-var webApp1 = new WebApp("my web app", "www.sonja.com", ["jQuery", "React"],
+const webApp1 = new WebApp("my web app", "www.sonja.com", ["jQuery", "React"],
     "CC", 5);
 console.log(webApp1);
 console.log(webApp1.getData());
 console.log("webApp1.reactBased(): " + webApp1.reactBased());
-var mobApp1 = new MobileApp("my mobile app", ["android", "ios"], "cc", 3);
+const mobApp1 = new MobileApp("my mobile app", ["android", "ios"], "cc", 3);
 console.log(mobApp1);
 mobApp1.like();
-console.log("mobile app after 1 call to like()....")
+console.log("mobile app after 1 call to like()....");
 console.log(mobApp1.getData());
 console.log("mobApp1.forAndroid()): " + mobApp1.forAndroid());
-var mobApp2 = new MobileApp("my mobile app 2", ["ios"], "cc", 2);
+const mobApp2 = new MobileApp("my mobile app 2", ["ios"], "cc", 2);
 console.log(mobApp2.getData());
 console.log("mobApp2.forAndroid()): " + mobApp2.forAndroid());
